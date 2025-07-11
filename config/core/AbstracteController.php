@@ -1,0 +1,37 @@
+<?php
+
+namespace App\Core;
+
+abstract class AbstracteController
+{
+    abstract public function index() ;
+    abstract public function create() ;
+    abstract public function edit() ;
+    abstract public function destroy() ;
+    abstract public function show() ;
+    abstract public function store();
+    abstract public function update() ;
+    protected $layout = 'base';
+
+    protected Session $session;
+
+    public function __construct()
+    {
+        $this->session = Session::getInstance();
+    }
+
+    public function render($view, $data = [])
+    {
+          if (!empty($data)) {
+             extract($data);
+    }
+             ob_start();
+            require_once __DIR__ . '/../../Template/' . $view . '.html.php';
+                $contentForLayout = ob_get_clean();
+
+        require_once __DIR__ . '/../../Template/layout/' . $this->layout . '.layout.php';
+
+    }
+    
+    
+}
