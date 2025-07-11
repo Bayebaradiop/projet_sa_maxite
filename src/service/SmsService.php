@@ -23,7 +23,11 @@ class SmsService
                 ]
             );
         } catch (\Exception $e) {
-            // Optionnel : log l'erreur
         }
+    }
+
+      public static function getInstance(): self
+    {
+        return new self();
     }
 }

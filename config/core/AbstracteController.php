@@ -17,7 +17,7 @@ abstract class AbstracteController
 
     public function __construct()
     {
-        $this->session = Session::getInstance();
+        $this->session = \App\Core\App::getDependency('session');
     }
 
     public function render($view, $data = [])
@@ -33,5 +33,8 @@ abstract class AbstracteController
 
     }
     
-    
+    public static function getInstance()
+    {
+        return new static();
+    }
 }

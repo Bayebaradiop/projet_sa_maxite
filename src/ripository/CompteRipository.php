@@ -2,7 +2,6 @@
 namespace App\Ripository;
 use PDO;
 use App\Entity\Compte;
-use App\Core\AbstracteController;
 use App\Core\AbstracteRipository;
 
 class CompteRipository extends AbstracteRipository
@@ -105,6 +104,9 @@ public function isCniUnique(string $cni): bool
     $stmt->execute();
     return $stmt->fetchColumn() == 0;
 }
+
+       public static function getInstance(): self
+    {
+        return new self();
+    }
 }
-
-

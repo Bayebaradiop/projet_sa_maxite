@@ -12,6 +12,10 @@ class ErreurController
         include __DIR__ . '/../../Template/erreu/erruer.php';
     }
 
+    public static function getInstance()
+    {
+    }
+
 
 }
 

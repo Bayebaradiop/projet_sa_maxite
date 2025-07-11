@@ -3,6 +3,8 @@ namespace App\Core;
 
 class Validator
 {
+
+    
     private static array $errors = [];
 
     public static function isEmail(string $email): bool
@@ -29,17 +31,16 @@ class Validator
     {
         return empty(self::$errors);
     }
-    
+
     public static function resetErrors(): void
     {
         self::$errors = [];
     }
-    
+
     public static function isValidPhone(string $phone): bool
     {
         return preg_match('/^(77|78|76|70|75)[0-9]{7}$/', $phone);
     }
-    
 
     public static function isValidCni(string $cni): bool
     {
@@ -47,4 +48,3 @@ class Validator
         return preg_match('/^[0-9]{13}$/', $cni);
     }
 }
-

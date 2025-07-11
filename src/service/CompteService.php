@@ -2,16 +2,14 @@
 
 namespace App\Service;
 
-use App\Entity\Compte;
-use App\Ripository\CompteRipository;
-
+use App\Core\App;
 class CompteService 
 {
-    private CompteRipository $compteRipository;
+    private  $compteRipository;
     
     public function __construct()
     {
-        $this->compteRipository = new CompteRipository();
+        $this->compteRipository = App::getDependency('compteRepository');
         
     }
 
@@ -33,6 +31,10 @@ class CompteService
     public function isCniUnique(string $cni): bool
     {
         return $this->compteRipository->isCniUnique($cni);
-    }   
-    
+    }
+
+    public static function getInstance(): self
+    {
+        return new self();
+    }
 }

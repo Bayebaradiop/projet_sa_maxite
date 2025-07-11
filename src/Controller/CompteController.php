@@ -1,76 +1,43 @@
 <?php
 namespace App\Controller;
-
-use App\Core\Session;
-use App\Service\CompteService;
 use App\Core\AbstracteController;
+use App\Core\App;
 use App\Core\Validator;
 use App\middlewares\CryptPassword;
-use App\Service\SmsService;
+
 class CompteController extends AbstracteController
 {
-    private CompteService $compteService;
-    private SmsService $smsService;
+    private $compteService;
+    private $smsService;
 
     public function __construct()
     {
-        parent::__construct(); 
-        $this->compteService = new CompteService();
-        $this->smsService = new SmsService();
+        parent::__construct();
+        $this->compteService = App::getDependency('compteService');
+        $this->smsService = App::getDependency('smsService');
     }
 
-    public function create()
-    {
-     
-    }
-
-    public function delete()
-    {
-
-    }
-
-    public function edit()
-    {
-        
-    }
-
-    public function show()
-    {
-
-    }
+    public function create() {}
+    public function delete() {}
+    public function edit() {}
+    public function show() {}
+    public function update() {}
+    public function destroy() {}
 
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             Validator::resetErrors();
 
-            if (Validator::isEmpty($_POST['nom'])) {
-                Validator::addError('nom', 'Le nom est obligatoire.');
-            }
-            if (Validator::isEmpty($_POST['prenom'])) {
-                Validator::addError('prenom', 'Le prénom est obligatoire.');
-            }
-            if (Validator::isEmpty($_POST['login'])) {
-                Validator::addError('login', 'Le login est obligatoire.');
-            }
-            if (Validator::isEmpty($_POST['password'])) {
-                Validator::addError('password', 'Le mot de passe est obligatoire.');
-            }
-            if (Validator::isEmpty($_POST['adresse'])) {
-                Validator::addError('adresse', 'L\'adresse est obligatoire.');
-            }
-            if (Validator::isEmpty($_POST['numeroCarteidentite'])) {
-                Validator::addError('numeroCarteidentite', 'Le numéro de carte d\'identité est obligatoire.');
-            }
-            if (Validator::isEmpty($_POST['numerotel'])) {
-                Validator::addError('numerotel', 'Le numéro de téléphone est obligatoire.');
-            }
-            if (empty($_FILES['photorecto']['name'])) {
-                Validator::addError('photorecto', 'La photo recto est obligatoire.');
-            }
-            if (empty($_FILES['photoverso']['name'])) {
-                Validator::addError('photoverso', 'La photo verso est obligatoire.');
-            }
+            if (Validator::isEmpty($_POST['nom'])) Validator::addError('nom', 'Le nom est obligatoire.');
+            if (Validator::isEmpty($_POST['prenom'])) Validator::addError('prenom', 'Le prénom est obligatoire.');
+            if (Validator::isEmpty($_POST['login'])) Validator::addError('login', 'Le login est obligatoire.');
+            if (Validator::isEmpty($_POST['password'])) Validator::addError('password', 'Le mot de passe est obligatoire.');
+            if (Validator::isEmpty($_POST['adresse'])) Validator::addError('adresse', 'L\'adresse est obligatoire.');
+            if (Validator::isEmpty($_POST['numeroCarteidentite'])) Validator::addError('numeroCarteidentite', 'Le numéro de carte d\'identité est obligatoire.');
+            if (Validator::isEmpty($_POST['numerotel'])) Validator::addError('numerotel', 'Le numéro de téléphone est obligatoire.');
+            if (empty($_FILES['photorecto']['name'])) Validator::addError('photorecto', 'La photo recto est obligatoire.');
+            if (empty($_FILES['photoverso']['name'])) Validator::addError('photoverso', 'La photo verso est obligatoire.');
 
             if (!Validator::isEmpty($_POST['numerotel'])) {
                 if (!Validator::isValidPhone($_POST['numerotel'])) {
@@ -95,7 +62,6 @@ class CompteController extends AbstracteController
                 exit;
             }
 
-
             $userData = [
                 'nom' => $_POST['nom'],
                 'prenom' => $_POST['prenom'],
@@ -112,50 +78,33 @@ class CompteController extends AbstracteController
             $solde = 65000;
 
             $compteData = [
-                'numero' => rand(1000000000, 9999999999), 
+                'numero' => rand(1000000000, 9999999999),
                 'datecreation' => $dateCreation,
                 'solde' => $solde,
                 'numerotel' => $_POST['numerotel'],
                 'typecompte' => 'principal'
             ];
 
-             $this->compteService->insertUserAndCompte($userData, $compteData);
+            $this->compteService->insertUserAndCompte($userData, $compteData);
 
-        $this->smsService->sendSms($_POST['numerotel'], 'Votre compte a été créé avec succès !');
+            $this->smsService->sendSms($_POST['numerotel'], 'Votre compte a été créé avec succès !');
 
-        header('Location: /login');
-        exit;
+            header('Location: /login');
+            exit;
         }
-    }
-
-
-
-    
- 
-
-    public function update()
-    {
-
     }
 
     public function index()
     {
-         $session = Session::getInstance();
-        $user =$session->get('user');
+        $user = $this->session->get('user');
         $userId = $user['id'];
 
- 
         try {
             $comptes = $this->compteService->getComptesByUserId((int)$userId);
-            
-            $this->render('Compte/solde',
-             [
+            $this->render('Compte/solde', [
                 'comptes' => $comptes,
                 'nombreComptes' => count($comptes)
-            ]  
-        );
-          
-            
+            ]);
         } catch (\Exception $e) {
             $this->session->set('errors', ['message' => $e->getMessage()]);
             header('Location: /erreur');
@@ -163,10 +112,8 @@ class CompteController extends AbstracteController
         }
     }
 
-    public function destroy()
+    public static function getInstance()
     {
-
+        return new self();
     }
-   
-   
 }

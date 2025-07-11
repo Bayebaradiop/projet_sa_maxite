@@ -1,19 +1,14 @@
 <?php
 
-
-use App\Controller\SecuriteController;
-use App\Controller\ErreurController;
-use App\Controller\CompteController;
-
+use App\Core\App;
 return [
-        '/'=>['controller'=> SecuriteController::class, 'method' => 'login'],
-       '/login'=>['controller'=> SecuriteController::class, 'method' => 'login'],
-    '/inscription'=>['controller'=> SecuriteController::class, 'method' => 'Inscription'],
-    '/store'=>['controller'=> CompteController::class, 'method' => 'store'],
-    '/logout'=>['controller'=> SecuriteController::class, 'method' => 'destroy'],
-    '/solde'=>['controller'=> CompteController::class, 'method' => 'index'],
-    '/erreur' => ['controller' => ErreurController::class, 'method' => 'erreur404'],   
-
+    '/'           => ['controller'=> App::getDependency('securiteController'), 'method' => 'login'],
+    '/login'      => ['controller'=> App::getDependency('securiteController'), 'method' => 'login'],
+    '/inscription'=> ['controller'=> App::getDependency('securiteController'), 'method' => 'Inscription'],
+    '/store'      => ['controller'=> App::getDependency('compteController'), 'method' => 'store'],
+    '/logout'     => ['controller'=> App::getDependency('securiteController'), 'method' => 'destroy'],
+    '/solde'      => ['controller'=> App::getDependency('compteController'), 'method' => 'index'],
+    '/erreur'     => ['controller' => App::getDependency('erreurController'), 'method' => 'erreur404'],
 ];
 
 

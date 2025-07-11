@@ -1,66 +1,47 @@
 <?php
 namespace App\Controller;
+use App\Core\App;
 use App\Core\Validator;
-
 use Exception;
-use App\Service\SecurityService;
 use App\Core\AbstracteController;
-use App\Ripository\UserRipository;
 
 class SecuriteController extends AbstracteController
 {
-        private SecurityService $securityService;
+    private  $securityService;
 
     public function __construct()
     {
-        parent::__construct();        
+        parent::__construct();
         $this->layout = 'securite';
-        $userRepository = new UserRipository();
-        $this->securityService = new SecurityService($userRepository);
+        $this->session = App::getDependency('session');
+        $this->securityService = App::getDependency('securityService');
     }
 
+    public function register() {}
 
-    public function register()
-    {
-
-    }
-
-     public function create()
-    {
-     
-    }
-    public function delete(){
-
-    }
-    public function edit()
-    {
-        
-    }
-    public function show(){}
- 
-    public function store()
-    {
-        
-    }
-    public function update(){} 
+    public function create() {}
+    public function delete() {}
+    public function edit() {}
+    public function show() {}
+    public function store() {}
+    public function update() {}
 
     public function index()
     {
-
         $this->render('login/login');
     }
 
-        public function login()
+    public function login()
     {
         $errors = $this->session->get('errors');
         if ($errors) {
             $this->session->unset('errors');
         }
-        
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $login = $_POST['login'] ?? '';
             $password = $_POST['password'] ?? '';
-            
+
             Validator::resetErrors();
 
             if (Validator::isEmpty($login)) {
@@ -73,18 +54,17 @@ class SecuriteController extends AbstracteController
 
             if (!Validator::isValid()) {
                 $this->session->set('errors', Validator::getErrors());
-
                 header('Location: /');
                 exit();
             }
-            
+
             try {
                 $user = $this->securityService->login($login, $password);
-                
+
                 if ($user) {
-                    $this->session->set('user',$user->toArray());
+                    $this->session->set('user', $user->toArray());
                     $this->session->set('typeuser', $user->getId());
-                    
+
                     $userType = $user->getTypeUser()->value;
 
                     if ($userType === 'client') {
@@ -92,41 +72,34 @@ class SecuriteController extends AbstracteController
                         header('Location: /solde');
                     } else if ($userType === 'serviceCommercial') {
                         $this->session->set('success', 'Connexion réussie ! Bienvenue sur votre espace vendeur.');
-                        // header('Location: /lister');
-                        // exit();
+                        // Ajoute une redirection si nécessaire
                     } else {
                         $this->session->set('success', 'Connexion réussie !');
-                        header('Location: /solde'); 
+                        header('Location: /solde');
                     }
                     exit();
                 } else {
                     Validator::addError('auth', 'Identifiants incorrects');
                     $this->session->set('errors', Validator::getErrors());
-
                     header('Location: /');
                     exit();
                 }
             } catch (Exception $e) {
                 Validator::addError('system', 'Une erreur est survenue lors de la connexion');
                 $this->session->set('errors', Validator::getErrors());
-
                 header('Location: /');
                 exit();
             }
         } else {
-            
             $this->render('login/login', [
                 'errors' => $errors
             ]);
         }
     }
 
-    
-
     public function Inscription()
-
     {
-         $errors = $_SESSION['errors'] ?? [];
+        $errors = $_SESSION['errors'] ?? [];
         if (isset($_SESSION['errors'])) {
             unset($_SESSION['errors']);
         }
@@ -143,7 +116,8 @@ class SecuriteController extends AbstracteController
         exit();
     }
 
-
+    public static function getInstance()
+    {
+        return new self();
+    }
 }
-
-?>

@@ -25,6 +25,11 @@ class SecurityService
             throw new Exception("Erreur lors de la connexion: " . $e->getMessage(), 0, $e);
         }
     }
+    public static function getInstance()
+    {
+        $userRepo = \App\Core\App::getDependency('userRepository');
+        return new self($userRepo);
+    }
 
     }
 

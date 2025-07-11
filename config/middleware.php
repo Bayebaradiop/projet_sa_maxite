@@ -1,7 +1,7 @@
 <?php
 
+use App\Core\App;
 use App\Entity\TypeUser;
-use App\Core\Session;
 
 const TYPE_CLIENT = TypeUser::Client;
 const TYPE_SERVICE_COMMERCIAL = TypeUser::ServiceCommercial;
@@ -9,7 +9,7 @@ const TYPE_SERVICE_COMMERCIAL = TypeUser::ServiceCommercial;
 global $middlewares;
 
 function getSession() {
-    return Session::getInstance();
+    return App::getDependency('session');
 }
 
 

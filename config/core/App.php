@@ -4,29 +4,71 @@ namespace App\Core;
 
 class App
 {
-    private static array $dependencies = [];
-
-    public static function run()
+    private static array $container = [];
+    private static bool $initialized = false;
+    
+    public static function run(): void
     {
-        self::$dependencies = [
-            // 'App\Core\Session' => Session::getInstance(),
-            // 'App\Ripository\ProduitRipository' => new \App\Ripository\ProduitRipository(),
-            // 'App\Ripository\CommandeRipository' => new \App\Ripository\CommandeRipository(),
-            // 'App\Ripository\ClientRipository' => new \App\Ripository\ClientRipository(),
-            // 'App\Service\CommandeService' => new \App\Service\CommandeService(new \App\Ripository\CommandeRipository()),
-            // 'App\Service\ClientService' => new \App\Service\ClientService(new \App\Ripository\ClientRipository()),
-            // 'App\Core\Database' => Database::getInstance(),
-        ];
+        self::initialize();
     }
-
-    public static function getDependency(string $key)
+    
+    private static function initialize(): void
     {
-        if (array_key_exists($key, self::$dependencies)) {
-            return self::$dependencies[$key];
+        if (self::$initialized) {
+            return;
         }
+        
+        $dependencies = [
+            'core' => [
+                'database' => \App\Core\Database::class,
+                'validator' => \App\Core\Validator::class,
+                'session' => \App\Core\Session::class,
+                'router' => \App\Core\Router::class,
+            ],
+            'abstract' => [
+                'abstractRepository' => \App\Core\AbstracteRipository::class,
+                'abstractService' => \App\Core\AbstracteService::class,
+                'abstractEntity' => \App\Core\AbstractEntity::class,
+                'abstractController' => \App\Core\AbstracteController::class,
+            ],
+            'services' => [
+                'smsService' => \App\Service\SmsService::class,
+                'compteService' => \App\Service\CompteService::class,
+                'securityService' => \App\Service\SecurityService::class,
+            ],
+            'controllers' => [
+                'compteController' => \App\Controller\CompteController::class,
+                'securiteController' => \App\Controller\SecuriteController::class,
+                'erreurController' => \App\Controller\ErreurController::class,
+            ],
+            'repositories' => [
+    'userRepository' => \App\Ripository\UserRipository::class,
+    'compteRepository' => \App\Ripository\CompteRipository::class,
+],
+        ];
+        
+        foreach ($dependencies as $category => $services) {
+            foreach ($services as $key => $class) {
+                self::$container[$category][$key] = fn() => $class::getInstance();
+            }
+        }
+        
+        self::$initialized = true;
+    }
+    
+    
+    public static function getDependency(string $key): mixed
+    {
+        self::initialize();
+        
+        foreach (self::$container as $category => $services) {
+            if (array_key_exists($key, $services)) {
+                $factory = $services[$key];
+                return $factory();
+            }
+        }
+        
         throw new \Exception("Dependency not found: " . $key);
     }
 }
-
-
 

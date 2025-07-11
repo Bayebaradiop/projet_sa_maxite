@@ -2,8 +2,6 @@
 
 namespace App\Core;
 
-use App\Controller\ErreurController;
-use App\Controller\CompteController;
 require_once __DIR__ . '/../middleware.php';
 
 class Router

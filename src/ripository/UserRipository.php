@@ -3,8 +3,6 @@
 
 namespace App\Ripository;
 use PDO;
-use PDOException;
-use App\Core\Database;
 use App\Core\AbstracteRipository;
 use App\Entity\Users;
 use App\middlewares\CryptPassword;
@@ -29,6 +27,11 @@ class UserRipository extends AbstracteRipository
             }
         }
         return null;
+    }
+
+       public static function getInstance(): self
+    {
+        return new self();
     }
 }
 
