@@ -53,7 +53,7 @@ $middlewares = [
             return true;
         }
 
-        header('Location: /erreur403');
+        header('Location: /erruer');
         exit;
     },
 
@@ -64,7 +64,7 @@ $middlewares = [
             return true;
         }
 
-        header('Location: /erreur403');
+        header('Location: /erruer');
         exit;
     }
 ];

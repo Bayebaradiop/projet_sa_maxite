@@ -34,10 +34,10 @@ return [
 
         'controller' => App::getDependency('compteController'),
         'method' => 'index',
-        "middleware" => [
-            'auth',
-            'isClient'
-        ]
+        // "middleware" => [
+        //     'auth',
+        //     'isClient'
+        // ]
     ],
 
 
@@ -45,10 +45,10 @@ return [
 
         'controller' => App::getDependency('TransactionController'),
         'method' => 'index',
-        "middleware" => [
-            'auth',
-            'isClient'
-        ]
+        // "middleware" => [
+        //     'auth',
+        //     'isClient'
+        // ]
     ],
 
 ];
