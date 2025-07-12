@@ -1,0 +1,44 @@
+CREATE TABLE users (
+    id SERIAL PRIMARY KEY,
+    nom VARCHAR(100) NOT NULL,
+    prenom VARCHAR(100) NOT NULL,
+    login VARCHAR(50) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    numerocarteidentite VARCHAR(50) NOT NULL UNIQUE,
+    photorecto VARCHAR(255),
+    photoverso VARCHAR(255),
+    adresse TEXT,
+    typeuser VARCHAR(20) NOT NULL CHECK (typeuser IN ('client', 'service_commercial')) 
+);
+
+
+CREATE TABLE compte (
+    id SERIAL PRIMARY KEY,
+    numero VARCHAR(20) NOT NULL UNIQUE,
+    datecreation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    solde DECIMAL(15, 2) DEFAULT 0.00,
+    numerotel VARCHAR(20) NOT NULL,
+    typecompte VARCHAR(20) NOT NULL CHECK (typecompte IN ('principal', 'secondaire')), 
+    userid INTEGER NOT NULL,
+    FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
+);
+
+
+CREATE TABLE transaction (
+    id SERIAL PRIMARY KEY,
+    date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    typetransaction VARCHAR(20) NOT NULL CHECK (typetransaction IN ('depot', 'retrait', 'paiement')), 
+    montant DECIMAL(15, 2) NOT NULL,
+    compteid INTEGER NOT NULL,
+    FOREIGN KEY (compteid) REFERENCES compte(id) ON DELETE CASCADE
+);
+
+
+
+CREATE INDEX idx_compte_numerotel ON compte (numerotel);
+
+CREATE INDEX idx_compte_userid ON compte (userid);
+
+CREATE INDEX idx_transaction_compteid ON transaction (compteid);
+
+CREATE INDEX idx_transaction_date ON transaction (date);
