@@ -7,7 +7,8 @@ use App\Core\AbstracteController;
 
 class SecuriteController extends AbstracteController
 {
-    private  $securityService;
+    private $securityService;
+    private $url;
 
     public function __construct()
     {
@@ -15,10 +16,10 @@ class SecuriteController extends AbstracteController
         $this->layout = 'securite';
         $this->session = App::getDependency('session');
         $this->securityService = App::getDependency('securityService');
+        $this->url = getenv('URL');
     }
 
     public function register() {}
-
     public function create() {}
     public function delete() {}
     public function edit() {}
@@ -34,69 +35,51 @@ class SecuriteController extends AbstracteController
     public function login()
     {
         $errors = $this->session->get('errors');
-        if ($errors) {
-            $this->session->unset('errors');
-        }
+        if ($errors) $this->session->unset('errors');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $login = $_POST['login'] ?? '';
             $password = $_POST['password'] ?? '';
 
-            Validator::resetErrors();
-
-            if (Validator::isEmpty($login)) {
-                Validator::addError('login', 'Le login est obligatoire');
-            }
-
-            if (Validator::isEmpty($password)) {
-                Validator::addError('password', 'Le mot de passe est obligatoire');
-            }
+            Validator::validateLoginFields($login, $password);
 
             if (!Validator::isValid()) {
                 $this->session->set('errors', Validator::getErrors());
-                header('Location: /');
+                header('Location: ' . $this->url . '/');
                 exit();
             }
 
             try {
                 $user = $this->securityService->login($login, $password);
+                if (!$user) throw new Exception('auth');
 
-                if ($user) {
-                    $this->session->set('user', $user->toArray());
-                    $this->session->set('typeuser', $user->getId());
+                $this->session->set('user', $user->toArray());
+                $this->session->set('typeuser', $user->getId());
+                $userType = $user->getTypeUser()->value;
 
-                    $userType = $user->getTypeUser()->value;
-
-                    if ($userType === 'client') {
-                        $this->session->set('success', 'Connexion réussie ! Bienvenue sur votre espace client.');
-                        header('Location: /solde');
-                    } else if ($userType === 'serviceCommercial') {
-                        $this->session->set('success', 'Connexion réussie ! Bienvenue sur votre espace vendeur.');
-                        // Ajoute une redirection si nécessaire
-                    } else {
-                        $this->session->set('success', 'Connexion réussie !');
-                        header('Location: /solde');
-                    }
-                    exit();
+                if ($userType === 'client') {
+                    $this->session->set('success', Validator::$fields['success_client']);
+                    header('Location: ' . $this->url . '/solde');
+                } elseif ($userType === 'serviceCommercial') {
+                    $this->session->set('success', Validator::$fields['success_vendeur']);
                 } else {
-                    Validator::addError('auth', 'Identifiants incorrects');
-                    $this->session->set('errors', Validator::getErrors());
-                    header('Location: /');
-                    exit();
+                    $this->session->set('success', Validator::$fields['success_default']);
+                    header('Location: ' . $this->url . '/solde');
                 }
+                exit();
             } catch (Exception $e) {
-                Validator::addError('system', 'Une erreur est survenue lors de la connexion');
+                $key = $e->getMessage() === 'auth' ? 'auth' : 'system';
+                Validator::addError($key, Validator::$fields[$key]);
                 $this->session->set('errors', Validator::getErrors());
-                header('Location: /');
+                header('Location: ' . $this->url . '/');
                 exit();
             }
         } else {
-            $this->render('login/login', [
-                'errors' => $errors
-            ]);
+            $this->render('login/login', ['errors' => $errors]);
         }
     }
 
+    
     public function Inscription()
     {
         $errors = $_SESSION['errors'] ?? [];
@@ -109,10 +92,11 @@ class SecuriteController extends AbstracteController
         ]);
     }
 
+
     public function destroy()
     {
         $this->session->destroy('user');
-        header('Location: /');
+        header('Location: ' . $this->url . '/');
         exit();
     }
 
