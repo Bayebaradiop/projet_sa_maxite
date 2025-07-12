@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controller;
+
 use App\Core\AbstracteController;
 use App\Core\App;
 use App\Core\Validator;
@@ -71,7 +73,7 @@ class CompteController extends AbstracteController
     }
 
 
-    
+
     public function index()
     {
         $user = $this->session->get('user');

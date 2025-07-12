@@ -3,21 +3,21 @@
 namespace App\Service;
 
 use App\Core\App;
-class CompteService 
+
+class CompteService
 {
     private  $compteRipository;
-    
+
     public function __construct()
     {
         $this->compteRipository = App::getDependency('compteRepository');
-        
     }
 
     public function getComptesByUserId(int $userId): array
     {
         return $this->compteRipository->findByUserId($userId);
     }
-    
+
     public function insertUserAndCompte(array $userData, array $compteData): bool
     {
         return $this->compteRipository->insertUserAndCompte($userData, $compteData);

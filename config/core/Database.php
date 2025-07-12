@@ -21,7 +21,7 @@ class Database
                 $password = DB_PASSWORD;
 
                 $dsn = "pgsql:host={$host};port={$port};dbname={$dbname};";
-                
+
                 self::$connection = new PDO(
                     $dsn,
                     $username,
@@ -36,12 +36,7 @@ class Database
                 die("Erreur de connexion à la base de données: " . $e->getMessage());
             }
         }
-        
+
         return self::$connection;
     }
 }
-
-
-
-
-

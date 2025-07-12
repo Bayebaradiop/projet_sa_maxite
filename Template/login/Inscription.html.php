@@ -1,5 +1,3 @@
-
-
 <div class="grid grid-cols-2 gap-6 bg-white rounded-lg shadow-lg p-8 w-full max-w-7xl h-auto">
   <div class="flex items-center justify-center h-[85vh]">
     <img src="fg.jpg" alt="Illustration" class="rounded-lg shadow-md h-full w-auto object-cover">
@@ -99,8 +97,8 @@
 
         <input type="hidden" name="typecompte" value="Principal">
 
-        <button 
-          type="submit" 
+        <button
+          type="submit"
           class="w-full bg-orange-500 text-white rounded-lg py-3 font-semibold hover:bg-orange-600 focus:ring-2 focus:ring-orange-500 focus:ring-offset-2 transition">
           Inscription et Création de Compte
         </button>

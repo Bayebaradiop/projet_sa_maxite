@@ -9,13 +9,13 @@ class Router
     public static function resolve(array $routes): void
     {
         $requestUri = $_SERVER['REQUEST_URI'] ?? '';
-        $currentUri = trim($requestUri, ''); 
-        
+        $currentUri = trim($requestUri, '');
+
         if (isset($routes[$currentUri])) {
             $route = $routes[$currentUri];
             $controllerClass = $route['controller'];
             $method = $route['method'];
-            
+
             if (isset($route['middleware'])) {
                 if (is_array($route['middleware'])) {
                     foreach ($route['middleware'] as $middleware) {
@@ -25,11 +25,10 @@ class Router
                     sama_middlewear($route['middleware']);
                 }
             }
-            
+
             $controller = new $controllerClass();
             $controller->$method();
-        } 
-        else {
+        } else {
             header('Location: /erreur');
             exit;
         }

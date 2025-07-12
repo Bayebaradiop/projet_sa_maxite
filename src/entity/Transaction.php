@@ -11,7 +11,7 @@ class Transaction
     private TypeTransaction $typeTransaction;
     private float $montant;
     private int $compteId;
-    private ?Compte $compte ;
+    private ?Compte $compte;
 
     public function __construct(
         \DateTime $date,
@@ -27,21 +27,54 @@ class Transaction
         $this->compte = $compte;
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getDate(): \DateTime { return $this->date; }
-    public function setDate(\DateTime $date): void { $this->date = $date; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getDate(): \DateTime
+    {
+        return $this->date;
+    }
+    public function setDate(\DateTime $date): void
+    {
+        $this->date = $date;
+    }
 
-    public function getCompte(): ?Compte { return $this->compte; }
-    public function setCompte(?Compte $compte): void { $this->compte = $compte; }
-    
-    public function getTypeTransaction(): TypeTransaction { return $this->typeTransaction; }
-    public function setTypeTransaction(TypeTransaction $typeTransaction): void { $this->typeTransaction = $typeTransaction; }
+    public function getCompte(): ?Compte
+    {
+        return $this->compte;
+    }
+    public function setCompte(?Compte $compte): void
+    {
+        $this->compte = $compte;
+    }
 
-    public function getMontant(): float { return $this->montant; }
-    public function setMontant(float $montant): void { $this->montant = $montant; }
+    public function getTypeTransaction(): TypeTransaction
+    {
+        return $this->typeTransaction;
+    }
+    public function setTypeTransaction(TypeTransaction $typeTransaction): void
+    {
+        $this->typeTransaction = $typeTransaction;
+    }
 
-    public function getCompteId(): int { return $this->compteId; }
-    public function setCompteId(int $compteId): void { $this->compteId = $compteId; }
+    public function getMontant(): float
+    {
+        return $this->montant;
+    }
+    public function setMontant(float $montant): void
+    {
+        $this->montant = $montant;
+    }
+
+    public function getCompteId(): int
+    {
+        return $this->compteId;
+    }
+    public function setCompteId(int $compteId): void
+    {
+        $this->compteId = $compteId;
+    }
 
     public function toArray(): array
     {

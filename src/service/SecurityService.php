@@ -1,23 +1,24 @@
 <?php
+
 namespace App\Service;
 
 use App\Entity\Users;
 use Exception;
 use App\Ripository\UserRipository;
 
-class SecurityService 
+class SecurityService
 {
     private UserRipository $userRipository;
 
 
 
-    public function __construct(UserRipository $userRipository){
+    public function __construct(UserRipository $userRipository)
+    {
 
-        $this->userRipository=$userRipository;
+        $this->userRipository = $userRipository;
+    }
 
-    } 
-  
-   public function login(string $login, string $password): ?Users
+    public function login(string $login, string $password): ?Users
     {
         try {
             return $this->userRipository->selectloginandpassword($login, $password);
@@ -30,8 +31,4 @@ class SecurityService
         $userRepo = \App\Core\App::getDependency('userRepository');
         return new self($userRepo);
     }
-
-    }
-
-
-
+}

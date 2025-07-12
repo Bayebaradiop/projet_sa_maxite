@@ -36,37 +36,82 @@ class Compte
         $this->transactions = [];
     }
 
-    public function getId(): ?int { return $this->id; }
-    public function getNumero(): string { return $this->numero; }
-    public function setNumero(string $numero): void { $this->numero = $numero; }
-    public function getUser(): Users { return $this->user; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getNumero(): string
+    {
+        return $this->numero;
+    }
+    public function setNumero(string $numero): void
+    {
+        $this->numero = $numero;
+    }
+    public function getUser(): Users
+    {
+        return $this->user;
+    }
 
-  public function setUser(Users $user): void
+    public function setUser(Users $user): void
     {
         $this->user = $user;
         $this->userId = $user->getId();
     }
 
-    public function getTransactions(): array { return $this->transactions; }
+    public function getTransactions(): array
+    {
+        return $this->transactions;
+    }
     public function addTransaction(Transaction $transaction): void
     {
         $this->transactions[] = $transaction;
     }
 
-    public function getDateCreation(): \DateTime { return $this->dateCreation; }
-    public function setDateCreation(\DateTime $dateCreation): void { $this->dateCreation = $dateCreation; }
+    public function getDateCreation(): \DateTime
+    {
+        return $this->dateCreation;
+    }
+    public function setDateCreation(\DateTime $dateCreation): void
+    {
+        $this->dateCreation = $dateCreation;
+    }
 
-    public function getSolde(): float { return $this->solde; }
-    public function setSolde(float $solde): void { $this->solde = $solde; }
+    public function getSolde(): float
+    {
+        return $this->solde;
+    }
+    public function setSolde(float $solde): void
+    {
+        $this->solde = $solde;
+    }
 
-    public function getNumeroTel(): string { return $this->numeroTel; }
-    public function setNumeroTel(string $numeroTel): void { $this->numeroTel = $numeroTel; }
+    public function getNumeroTel(): string
+    {
+        return $this->numeroTel;
+    }
+    public function setNumeroTel(string $numeroTel): void
+    {
+        $this->numeroTel = $numeroTel;
+    }
 
-    public function getTypeCompte(): TypeCompte { return $this->typeCompte; }
-    public function setTypeCompte(TypeCompte $typeCompte): void { $this->typeCompte = $typeCompte; }
+    public function getTypeCompte(): TypeCompte
+    {
+        return $this->typeCompte;
+    }
+    public function setTypeCompte(TypeCompte $typeCompte): void
+    {
+        $this->typeCompte = $typeCompte;
+    }
 
-    public function getUserId(): int { return $this->userId; }
-    public function setUserId(int $userId): void { $this->userId = $userId; }
+    public function getUserId(): int
+    {
+        return $this->userId;
+    }
+    public function setUserId(int $userId): void
+    {
+        $this->userId = $userId;
+    }
 
 
     public function toArray(): array
@@ -85,12 +130,17 @@ class Compte
     public static function toObject(array $data): self
     {
         $userData = $data['user'] ?? null;
-        
+
         $user = $userData ? Users::toObject($userData) : new Users(
-            '', '', '', '', '', '', 
+            '',
+            '',
+            '',
+            '',
+            '',
+            '',
             TypeUser::from('client')
         );
-        
+
         $compte = new self(
             $data['numero'] ?? '',
             new \DateTime($data['datecreation'] ?? 'now'),
@@ -100,14 +150,14 @@ class Compte
             (int)($data['userid'] ?? 0),
             $user
         );
-        
+
         // if (isset($data['id'])) {
         //     $reflection = new \ReflectionClass(self::class);
         //     $property = $reflection->getProperty('id');
         //     $property->setAccessible(true);
         //     $property->setValue($compte, (int)$data['id']);
         // }
-        
+
         return $compte;
     }
 }

@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Service;
+
 use Twilio\Rest\Client;
 
 class SmsService
@@ -16,7 +18,7 @@ class SmsService
 
         try {
             $twilio->messages->create(
-                $destinationNumber, 
+                $destinationNumber,
                 [
                     'from' => TWILIO_FROM,
                     'body' => $message
@@ -26,7 +28,7 @@ class SmsService
         }
     }
 
-      public static function getInstance(): self
+    public static function getInstance(): self
     {
         return new self();
     }

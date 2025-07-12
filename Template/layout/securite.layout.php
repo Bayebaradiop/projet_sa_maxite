@@ -1,12 +1,13 @@
-
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MAXITSA</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gradient-to-br from-gray-100 to-gray-300 flex items-center justify-center h-screen">
   <div class="from-gray-100  rounded-lg p-10 w-full max-w-7xl h-auto">
 
@@ -16,11 +17,9 @@
 
     <!-- Main Content -->
     <main>
- <?php echo  $contentForLayout ?>
+      <?php echo  $contentForLayout ?>
     </main>
   </div>
 </body>
+
 </html>
-
-
-

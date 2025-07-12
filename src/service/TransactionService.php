@@ -14,17 +14,13 @@ class TransactionService
         $this->transactionRepo = $transactionRepo;
     }
 
-    
+
     public function getLast10TransactionsByUserId(int $userId): array
     {
         return $this->transactionRepo->getLast10Transactions($userId);
     }
     public static function getInstance(): self
     {
-       return new self (TransactionRipository::getInstance());
+        return new self(TransactionRipository::getInstance());
     }
-    
-
-
-    
 }

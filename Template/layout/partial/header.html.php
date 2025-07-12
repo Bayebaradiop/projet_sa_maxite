@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,9 +8,13 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+        }
     </style>
 </head>
+
 <body class="bg-gray-100 flex h-screen">
     <!-- Sidebar -->
     <div class="w-64 bg-gray-900 text-white flex flex-col">
@@ -17,7 +22,7 @@
         <div class="p-6">
             <h1 class="text-2xl font-bold text-orange-400">MAXITSA.</h1>
         </div>
-        
+
         <!-- Navigation Menu -->
         <nav class="flex-1 px-4">
             <ul class="space-y-2">
@@ -72,7 +77,7 @@
                 </li>
             </ul>
         </nav>
-        
+
         <!-- Logout Button -->
         <div class="p-4">
             <a href="/logout" class="w-full flex items-center justify-center px-4 py-3 text-white bg-orange-500 rounded-lg hover:bg-orange-600 transition-colors">
@@ -83,11 +88,11 @@
             </a>
         </div>
     </div>
-    
+
     <!-- Main Content -->
-   <div class="flex-1 flex flex-col overflow-hidden">
-            <!-- Header -->
-            <header class="bg-white shadow-sm p-4 flex justify-between items-center">
+    <div class="flex-1 flex flex-col overflow-hidden">
+        <!-- Header -->
+        <header class="bg-white shadow-sm p-4 flex justify-between items-center">
             <div class="flex space-x-4">
                 <div class="w-16 h-10 bg-gray-900 rounded-lg"></div>
                 <div class="w-16 h-10 bg-orange-500 rounded-lg"></div>
@@ -107,4 +112,3 @@
                 </svg>
             </div>
         </header>
-            

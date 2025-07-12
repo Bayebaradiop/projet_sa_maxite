@@ -1,5 +1,7 @@
 <?php
+
 namespace App\Controller;
+
 use App\Core\App;
 use App\Core\Validator;
 use Exception;
@@ -79,7 +81,7 @@ class SecuriteController extends AbstracteController
         }
     }
 
-    
+
     public function Inscription()
     {
         $errors = $_SESSION['errors'] ?? [];
@@ -100,10 +102,8 @@ class SecuriteController extends AbstracteController
         exit();
     }
 
-  public static function getInstance()
+    public static function getInstance()
     {
-                return new self();
-
+        return new self();
     }
-
 }

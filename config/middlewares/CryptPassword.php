@@ -1,6 +1,7 @@
 <?php
 
 namespace App\middlewares;
+
 class CryptPassword
 {
     public static function crypt(string $password): string

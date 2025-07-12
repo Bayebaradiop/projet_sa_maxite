@@ -5,6 +5,7 @@ namespace App\Controller;
 
 use App\Core\AbstracteController;
 use App\Core\App;
+
 class TransactionController extends AbstracteController
 {
     private  $transactionService;
@@ -26,10 +27,7 @@ class TransactionController extends AbstracteController
         ]);
     }
 
-    public function destroy()
-    {
-        
-    }
+    public function destroy() {}
     public function create()
     {
         // Logique pour créer une transaction
@@ -51,11 +49,8 @@ class TransactionController extends AbstracteController
     {
         // Logique pour mettre à jour une transaction
     }
-      public static function getInstance()
+    public static function getInstance()
     {
-                return new self();
-
+        return new self();
     }
-
-
 }

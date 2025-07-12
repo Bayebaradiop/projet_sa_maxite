@@ -2,6 +2,7 @@
 
 
 namespace App\Ripository;
+
 use PDO;
 use App\Core\AbstracteRipository;
 use App\Entity\Users;
@@ -10,8 +11,9 @@ use App\middlewares\CryptPassword;
 class UserRipository extends AbstracteRipository
 {
 
-  public function __construct() {
-        parent::__construct(); 
+    public function __construct()
+    {
+        parent::__construct();
     }
 
     public function selectloginandpassword($login, $password): ?Users
@@ -29,11 +31,8 @@ class UserRipository extends AbstracteRipository
         return null;
     }
 
-       public static function getInstance(): self
+    public static function getInstance(): self
     {
         return new self();
     }
 }
-
-
-?>

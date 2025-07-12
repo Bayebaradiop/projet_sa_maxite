@@ -4,22 +4,16 @@
 
 namespace App\Controller;
 
-class ErreurController 
+class ErreurController
 {
-    
-   public function erreur404()
+
+    public function erreur404()
     {
         include __DIR__ . '/../../Template/erreu/erruer.php';
     }
 
     public static function getInstance()
     {
-                return new self();
-
+        return new self();
     }
-
-
 }
-
-
-

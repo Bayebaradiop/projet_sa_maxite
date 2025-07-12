@@ -1,4 +1,3 @@
-
 <div class="max-w-7xl mx-auto">
     <!-- Quick Stats -->
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
@@ -15,7 +14,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="bg-white p-6 rounded-lg card-shadow hover-lift">
             <div class="flex items-center justify-between">
                 <div>
@@ -29,7 +28,7 @@
                 </div>
             </div>
         </div>
-        
+
         <div class="bg-white p-6 rounded-lg card-shadow hover-lift">
             <div class="flex items-center justify-between">
                 <div>
@@ -44,7 +43,7 @@
             </div>
         </div>
     </div>
-    
+
     <div class="bg-white rounded-lg card-shadow hover-lift mb-8">
         <div class="p-6 border-b border-gray-200">
             <h3 class="text-lg font-semibold text-gray-900">Informations du compte</h3>
