@@ -58,7 +58,7 @@ class Transaction
     {
         return new self(
             new \DateTime($data['date']),
-            TypeTransaction::from($data['typeTransaction']),
+            TypeTransaction::from($data['typetransaction']),
             (float)$data['montant'],
             (int)$data['compteId']
         );

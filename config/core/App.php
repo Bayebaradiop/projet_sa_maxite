@@ -35,18 +35,18 @@ class App
                 'smsService' => \App\Service\SmsService::class,
                 'compteService' => \App\Service\CompteService::class,
                 'securityService' => \App\Service\SecurityService::class,
-                // 'transactionService' => \App\Service\TransactionService::class,
+                'transactionService' => \App\Service\TransactionService::class,
             ],
             'controllers' => [
                 'compteController' => \App\Controller\CompteController::class,
                 'securiteController' => \App\Controller\SecuriteController::class,
                 'erreurController' => \App\Controller\ErreurController::class,
-                // 'TransactionController' => \App\Controller\TransactionController::class,
+                'TransactionController' => \App\Controller\TransactionController::class,
             ],
             'repositories' => [
     'userRepository' => \App\Ripository\UserRipository::class,
     'compteRepository' => \App\Ripository\CompteRipository::class,
-    // 'TransactionRipository' => \App\Ripository\TransactionRipository::class,
+    'TransactionRipository' => \App\Ripository\TransactionRipository::class,
 ],
         ];
         

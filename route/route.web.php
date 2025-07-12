@@ -10,7 +10,8 @@ return [
     '/solde'      => ['controller'=> App::getDependency('compteController'), 'method' => 'index'],
     '/erreur'     => ['controller' => App::getDependency('erreurController'), 'method' => 'erreur404'],
 
-    // '/historique' => ['controller' => App::getDependency('TransactionController'), 'method' => 'index'],
+    '/historique' => ['controller' => App::getDependency('TransactionController'), 'method' => 'index'],
+  
 ];
 
 

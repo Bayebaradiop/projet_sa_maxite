@@ -38,7 +38,19 @@
         <td class="p-4 text-gray-600">
             <div class="flex items-center">
                 <div class="status-indicator w-2 h-2 rounded-full bg-green-500 mr-2"></div>
-                <?= htmlspecialchars($transaction->getDescription()) ?>
+                <?php
+                    $type = strtolower($transaction->getTypeTransaction()->value);
+                    if ($type === 'depot') {
+                        $desc = "Dépôt sur le compte principal";
+                    } elseif ($type === 'retrait') {
+                        $desc = "Retrait effectué";
+                    } elseif ($type === 'paiement') {
+                        $desc = "Paiement d'un service";
+                    } else {
+                        $desc = "Transaction";
+                    }
+                ?>
+                <?= htmlspecialchars($desc) ?>
             </div>
         </td>
         <td class="p-4 <?= $transaction->getMontant() < 0 ? 'text-red-600' : 'text-green-600' ?> font-semibold">
