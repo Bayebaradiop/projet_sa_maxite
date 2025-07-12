@@ -14,6 +14,8 @@ class ErreurController
 
     public static function getInstance()
     {
+                return new self();
+
     }
 
 

@@ -8,6 +8,11 @@ class AbstracteRipository{
     {
         $this->pdo = App::getDependency('database');
     }
+
+    public function getIntance(){
+
+        return new static ();
+    }
 }
 
 

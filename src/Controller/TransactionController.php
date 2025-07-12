@@ -51,8 +51,11 @@ class TransactionController extends AbstracteController
     {
         // Logique pour mettre à jour une transaction
     }
-       public static function getInstance()
+      public static function getInstance()
     {
-        return new self();
+                return new self();
+
     }
+
+
 }

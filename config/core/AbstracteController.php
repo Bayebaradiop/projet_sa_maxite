@@ -33,8 +33,10 @@ abstract class AbstracteController
 
     }
     
-    public static function getInstance()
-    {
-        return new static();
-    }
+
+public static function getInstance()
+{
+    return new static();
+}
+
 }

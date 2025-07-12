@@ -100,8 +100,10 @@ class SecuriteController extends AbstracteController
         exit();
     }
 
-    public static function getInstance()
+  public static function getInstance()
     {
-        return new self();
+                return new self();
+
     }
+
 }

@@ -8,5 +8,10 @@ abstract class AbstracteService
     {
         $this->repository = $repository;
     }
+
+    public static function getInstance(AbstracteRipository $repository): self
+    {
+        return new static($repository);
+    }
 }
 

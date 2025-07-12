@@ -12,4 +12,12 @@ class CryptPassword
     {
         return password_verify($password, $hash);
     }
+
+
+    public function __invoke()
+    {
+        if (isset($_POST['password'])) {
+            $_POST['password'] = self::crypt($_POST['password']);
+        }
+    }
 }
