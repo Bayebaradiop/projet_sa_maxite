@@ -62,9 +62,9 @@
                 </table>
             </div>
             <div class="bg-gray-50 p-4 flex justify-between items-center">
-                <button class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
+                <a  href="/afficheTOusLesTransactions" class="bg-pink-500 hover:bg-pink-600 text-white px-4 py-2 rounded-lg transition-colors duration-200">
                     Voir plus
-                </button>
+                </a>
                 <div class="text-sm text-gray-500">
                     <span class="bg-blue-500 text-white px-3 py-1 rounded">
                         Du 08 au 15/07

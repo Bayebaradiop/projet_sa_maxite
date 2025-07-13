@@ -51,4 +51,13 @@ return [
         // ]
     ],
 
+    '/afficheTOusLesTransactions'=>[
+        'controller' => App::getDependency('TransactionController'),
+        'method' => 'afficheTOusLesTransactions',
+        // "middleware" => [
+        //     'auth',
+        //     'isAdmin'
+        // ]
+    ]
+
 ];

@@ -27,6 +27,17 @@ class TransactionController extends AbstracteController
         ]);
     }
 
+
+    public function afficheTOusLesTransactions(){
+        $user = $this->session->get('user');
+        $userId = $user['id'];
+        $transactions = $this->transactionService->afficheTOusLesTransactions($userId);
+
+        $this->render("Transaction/TousLesTransaction" , [
+            'transactions' => $transactions
+        ] );
+    }
+
     public function destroy() {}
     public function create()
     {

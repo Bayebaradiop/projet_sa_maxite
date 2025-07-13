@@ -13,6 +13,7 @@ class TransactionRipository extends AbstracteRipository
     {
         parent::__construct();
     }
+
     public function getLast10Transactions($userId): array
     {
         $sql = "SELECT t.* 
@@ -31,6 +32,27 @@ class TransactionRipository extends AbstracteRipository
         }
         return $transactions;
     }
+
+
+   public function afficheTOusLesTransactions($userId): array
+    {
+        $sql = "SELECT t.* 
+            FROM transaction t
+            INNER JOIN compte c ON t.compteid = c.id
+            WHERE c.userid = :userid and c.typecompte='principal'
+            ORDER BY t.date DESC
+            ";
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindParam(':userid', $userId, PDO::PARAM_INT);
+        $statement->execute();
+
+        $transactions = [];
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $transactions[] = \App\Entity\Transaction::toObject($row);
+        }
+        return $transactions;
+    }
+
 
     public static function getInstance(): self
     {

@@ -19,6 +19,14 @@ class TransactionService
     {
         return $this->transactionRepo->getLast10Transactions($userId);
     }
+
+        public function afficheTOusLesTransactions(int $userId): array
+    {
+        return $this->transactionRepo->afficheTOusLesTransactions($userId);
+    }
+    
+    
+
     public static function getInstance(): self
     {
         return new self(TransactionRipository::getInstance());
