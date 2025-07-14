@@ -6,7 +6,7 @@
                 <div>
                     <p class="text-sm text-gray-600">Solde principal</p>
                     <p class="text-2xl font-bold text-gray-900">
-                        <?php echo number_format($comptes[0]->getSolde(), 0, ',', ' ') . ' CFA'; ?>
+                        <?php echo number_format($comptePrincipal->getSolde(), 0, ',', ' ') . ' CFA'; ?>
                     </p>
                 </div>
                 <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
@@ -20,7 +20,7 @@
                 <div>
                     <p class="text-sm text-gray-600">Numero Telephone</p>
                     <p class="text-2xl font-bold text-gray-900">
-                        <?php echo htmlspecialchars($comptes[0]->getNumeroTel()); ?>
+                        <?php echo htmlspecialchars($comptePrincipal->getNumeroTel()); ?>
                     </p>
                 </div>
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
@@ -34,7 +34,7 @@
                 <div>
                     <p class="text-sm text-gray-600">Transactions ce mois</p>
                     <p class="text-2xl font-bold text-gray-900">
-                        <?php echo count($comptes[0]->getTransactions() ?? []); ?>
+                        <?php echo count($comptePrincipal->getTransactions() ?? []); ?>
                     </p>
                 </div>
                 <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center">
@@ -53,18 +53,18 @@
                 <div class="flex">
                     <div class="w-16 h-16 bg-gradient-to-r from-primary to-primary-dark rounded-full flex  ">
                         <span class="text-white font-bold text-lg">
-                            <?php echo strtoupper(substr($comptes[0]->getUser()->getNom(), 0, 1) . substr($comptes[0]->getUser()->getPrenom(), 0, 1)); ?>
+                            <?php echo strtoupper(substr($comptePrincipal->getUser()->getNom(), 0, 1) . substr($comptePrincipal->getUser()->getPrenom(), 0, 1)); ?>
                         </span>
                     </div>
                     <div>
                         <h4 class="text-xl font-semibold text-gray-900">
-                            <?php echo htmlspecialchars($comptes[0]->getUser()->getNom() . ' ' . $comptes[0]->getUser()->getPrenom()); ?>
+                            <?php echo htmlspecialchars($comptePrincipal->getUser()->getNom() . ' ' . $comptePrincipal->getUser()->getPrenom()); ?>
                         </h4>
-                        <p class="text-gray-600">Numéro de compte: <?php echo htmlspecialchars($comptes[0]->getNumero()); ?></p>
+                        <p class="text-gray-600">Numéro de compte: <?php echo htmlspecialchars($comptePrincipal->getNumero()); ?></p>
                         <div class="flex items-center mt-2 ">
                             <span class="text-sm text-gray-500">Solde actuel:</span>
                             <span class="text-lg font-bold text-primary">
-                                <?php echo number_format($comptes[0]->getSolde(), 0, ',', ' ') . ' CFA'; ?>
+                                <?php echo number_format($comptePrincipal->getSolde(), 0, ',', ' ') . ' CFA'; ?>
                             </span>
                         </div>
                     </div>

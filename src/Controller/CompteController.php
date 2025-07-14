@@ -80,10 +80,9 @@ class CompteController extends AbstracteController
         $userId = $user['id'];
 
         try {
-            $comptes = $this->compteService->getComptesByUserId((int)$userId);
+                $comptePrincipal = $this->compteService->getComptePrincipalByUserId($userId);
             $this->render('Compte/solde', [
-                'comptes' => $comptes,
-                'nombreComptes' => count($comptes)
+                'comptePrincipal' => $comptePrincipal
             ]);
         } catch (\Exception $e) {
             $this->session->set('errors', ['message' => $e->getMessage()]);
@@ -91,6 +90,79 @@ class CompteController extends AbstracteController
             exit;
         }
     }
+
+
+    public function AjouterCompteAffiche()
+    {
+        $user = $this->session->get('user');
+        $userId = $user['id'];
+                $comptePrincipal = $this->compteService->getComptePrincipalByUserId($userId);
+              
+        $secondaires = $this->compteService->getComptesSecondaireByUserId((int)$userId);
+        $this->render("Compte/AjouterCompte", [
+            'comptes' => $comptePrincipal,
+            'comptesSecondaires' => $secondaires
+        ]);
+    }
+
+
+
+
+    public function ajouterCompteSecondaire()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            try {
+                $user = $this->session->get('user');
+                $userId = $user['id'];
+                $comptePrincipal = $this->compteService->getComptePrincipalByUserId($userId);
+
+                // Validation
+            Validator:: validateCompteSecondaire($_POST, $this->compteService);
+
+                if (!Validator::isValid()) {
+                    $this->session->set('errors', Validator::getErrors());
+                    $this->session->set('openPopup', true);
+                    header('Location: ' . $this->url . '/AjouterCompte');
+                    exit;
+                }
+
+                $numerotel = $_POST['numerotel'];
+                $solde = isset($_POST['solde']) ? floatval($_POST['solde']) : 0;
+
+                if ($solde > 0 && $comptePrincipal->getSolde() < $solde) {
+                    $this->session->set('errors', ['solde' => 'Solde principal insuffisant']);
+                    $this->session->set('openPopup', true);
+                    header('Location: ' . $this->url . '/AjouterCompte');
+                    exit;
+                }
+
+                $compteData = [
+                    'numero' => rand(1000000000, 9999999999),
+                    'datecreation' => date('Y-m-d H:i:s'),
+                    'solde' => $solde,
+                    'numerotel' => $numerotel,
+                    'typecompte' => 'secondaire',
+                    'userid' => $userId
+                ];
+
+                if ($solde > 0) {
+                    $this->compteService->retirerSolde($comptePrincipal->getId(), $solde);
+                }
+
+                $this->compteService->ajouterCompteSecondaire($compteData);
+
+                $this->session->set('success', 'Compte secondaire ajouté avec succès');
+                header('Location: ' . $this->url . '/AjouterCompte');
+                exit;
+            } catch (\Exception $e) {
+                $this->session->set('errors', ['message' => $e->getMessage()]);
+                $this->session->set('openPopup', true);
+                header('Location: ' . $this->url . '/AjouterCompte');
+                exit;
+            }
+        }
+    }
+
 
     public static function getInstance()
     {

@@ -58,6 +58,17 @@ return [
         //     'auth',
         //     'isAdmin'
         // ]
-    ]
+    ],
+
+       '/AjouterCompte'=>[
+        'controller' => App::getDependency('compteController'),
+        'method' => 'AjouterCompteAffiche'
+       ],
+
+    '/ajouterCompteSecondaire' => [
+        'controller' => App::getDependency('compteController'),
+        'method' => 'ajouterCompteSecondaire'
+    ],
+
 
 ];

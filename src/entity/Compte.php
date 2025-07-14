@@ -151,13 +151,16 @@ class Compte
             $user
         );
 
-        // if (isset($data['id'])) {
-        //     $reflection = new \ReflectionClass(self::class);
-        //     $property = $reflection->getProperty('id');
-        //     $property->setAccessible(true);
-        //     $property->setValue($compte, (int)$data['id']);
-        // }
+        if (isset($data['id'])) {
+            $reflection = new \ReflectionClass(self::class);
+            $property = $reflection->getProperty('id');
+            $property->setAccessible(true);
+            $property->setValue($compte, (int)$data['id']);
+        }
 
         return $compte;
     }
+
+
+  
 }

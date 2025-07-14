@@ -37,4 +37,25 @@ class CompteService
     {
         return new self();
     }
+
+public function ajouterCompteSecondaire(array $data): bool
+{
+    return $this->compteRipository->ajouterSecondaire($data);
+}
+
+    public function getComptePrincipalByUserId(int $userId): ?\App\Entity\Compte
+    {
+        return $this->compteRipository->getComptePrincipalByUserId($userId);
+    }
+
+
+public function retirerSolde(int $compteId, float $montant): bool
+{
+    return $this->compteRipository->retirerSolde($compteId, $montant);
+}
+
+public function getComptesSecondaireByUserId(int $userId): array
+{
+    return $this->compteRipository->getComptesSecondaireByUserId($userId);
+}
 }
