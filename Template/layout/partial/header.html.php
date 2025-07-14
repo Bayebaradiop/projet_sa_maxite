@@ -13,6 +13,21 @@
             font-family: 'Inter', sans-serif;
         }
     </style>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'maxitsa-orange': '#FF6B35',
+                        'maxitsa-dark': '#1a1a1a',
+                        'sidebar-bg': '#2c2c2c',
+                        'sidebar-hover': '#3a3a3a'
+                    }
+                }
+            }
+        }
+    </script>
 </head>
 
 <body class="bg-gray-100 flex h-screen">
@@ -36,7 +51,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
+                    <a href="/AjouterCompte" class="flex items-center px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
                         </svg>
@@ -52,7 +67,7 @@
                     </a>
                 </li>
                 <li>
-                    <a href="#" class="flex items-center px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
+                    <a href="/solde" class="flex items-center px-4 py-3 text-gray-400 hover:text-white hover:bg-gray-800 rounded-lg transition-colors">
                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                         </svg>
