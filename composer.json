@@ -9,11 +9,10 @@
             "App\\Core\\": "config/core/",
             "App\\Config\\": "config",
             "App\\middlewares\\": "config/middlewares/",
-
-
             "App\\Controller\\": "src/Controller/"
 
         }
+        
     },
     "authors": [
         
@@ -24,5 +23,8 @@
     "require": {
         "vlucas/phpdotenv": "^5.6",
         "twilio/sdk": "^8.6"
+    },
+    "scripts": {
+        "database:migrate": "php migration.php"
     }
 }

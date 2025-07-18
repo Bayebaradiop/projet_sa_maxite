@@ -1,5 +1,6 @@
 <?php
 
+
 namespace App\Core;
 
 use PDO;
@@ -13,19 +14,9 @@ class Database
     {
         if (self::$connection === null) {
             try {
-                // Utilisation des constantes définies dans env.php
-                $host = DB_HOST;
-                $port = DB_PORT;
-                $dbname = DB_DATABASE;
-                $username = DB_USERNAME;
-                $password = DB_PASSWORD;
-
-                $dsn = "pgsql:host={$host};port={$port};dbname={$dbname};";
-
                 self::$connection = new PDO(
-                    $dsn,
-                    $username,
-                    $password,
+                    DSN,
+                    DB_USERNAME,                  DB_PASSWORD,
                     [
                         PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
                         PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,

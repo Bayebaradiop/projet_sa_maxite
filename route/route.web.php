@@ -13,7 +13,9 @@ return [
     ],
     '/inscription' => [
         'controller' => App::getDependency('securiteController'),
-        'method' => 'Inscription'
+        'method' => 'Inscription',
+        
+        
     ],
     '/store'      => [
         'controller' => App::getDependency('compteController'),
@@ -24,51 +26,43 @@ return [
         'method' => 'destroy'
     ],
     '/erreur'     => [
-
         'controller' => App::getDependency('erreurController'),
         'method' => 'erreur404'
     ],
 
-
     '/solde' => [
-
         'controller' => App::getDependency('compteController'),
         'method' => 'index',
-        // "middleware" => [
-        //     'auth',
-        //     'isClient'
-        // ]
+        'middleware' => 'auth'
     ],
 
-
     '/historique' => [
-
         'controller' => App::getDependency('TransactionController'),
         'method' => 'index',
-        // "middleware" => [
-        //     'auth',
-        //     'isClient'
-        // ]
+        'middleware' => 'auth'
     ],
 
     '/afficheTOusLesTransactions'=>[
         'controller' => App::getDependency('TransactionController'),
         'method' => 'afficheTOusLesTransactions',
-        // "middleware" => [
-        //     'auth',
-        //     'isAdmin'
-        // ]
+        'middleware' => 'auth'
     ],
 
-       '/AjouterCompte'=>[
+    '/AjouterCompte'=>[
         'controller' => App::getDependency('compteController'),
-        'method' => 'AjouterCompteAffiche'
-       ],
+        'method' => 'AjouterCompteAffiche',
+        'middleware' => 'auth'
+    ],
 
     '/ajouterCompteSecondaire' => [
         'controller' => App::getDependency('compteController'),
-        'method' => 'ajouterCompteSecondaire'
+        'method' => 'ajouterCompteSecondaire',
+        'middleware' => 'auth'
     ],
 
-
+    '/changerComptePrincipal' => [
+        'controller' => App::getDependency('compteController'),
+        'method' => 'changerComptePrincipal',
+        'middleware' => 'auth'
+    ],
 ];

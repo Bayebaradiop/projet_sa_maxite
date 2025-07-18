@@ -4,6 +4,7 @@ namespace App\Core;
 
 abstract class AbstracteController
 {
+    use Singleton;
     abstract public function index();
     abstract public function create();
     abstract public function edit();
@@ -33,8 +34,4 @@ abstract class AbstracteController
     }
 
 
-    public static function getInstance()
-    {
-        return new static();
-    }
 }

@@ -38,10 +38,10 @@ class CompteService
         return new self();
     }
 
-public function ajouterCompteSecondaire(array $data): bool
-{
-    return $this->compteRipository->ajouterSecondaire($data);
-}
+    public function ajouterCompteSecondaire(array $data): bool
+    {
+        return $this->compteRipository->ajouterSecondaire($data);
+    }
 
     public function getComptePrincipalByUserId(int $userId): ?\App\Entity\Compte
     {
@@ -49,13 +49,19 @@ public function ajouterCompteSecondaire(array $data): bool
     }
 
 
-public function retirerSolde(int $compteId, float $montant): bool
-{
-    return $this->compteRipository->retirerSolde($compteId, $montant);
-}
+    public function retirerSolde(int $compteId, float $montant): bool
+    {
+        return $this->compteRipository->retirerSolde($compteId, $montant);
+    }
 
-public function getComptesSecondaireByUserId(int $userId): array
+    public function getComptesSecondaireByUserId(int $userId): array
+    {
+        return $this->compteRipository->getComptesSecondaireByUserId($userId);
+    }
+
+
+public function basculerEnprincipal(int $userId, int $compteSecondaireId): void
 {
-    return $this->compteRipository->getComptesSecondaireByUserId($userId);
+    $this->compteRipository->basculerEnprincipal($userId, $compteSecondaireId);
 }
 }

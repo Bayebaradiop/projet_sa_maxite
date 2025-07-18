@@ -40,39 +40,53 @@ class SecuriteController extends AbstracteController
         if ($errors) $this->session->unset('errors');
 
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $login = $_POST['login'] ?? '';
-            $password = $_POST['password'] ?? '';
+            $loginData = [
+                'login' => $_POST['login'] ?? '',
+                'password' => $_POST['password'] ?? ''
+            ];
 
-            Validator::validateLoginFields($login, $password);
+            $rules = [
+                'login' => [
+                    'required',
+                    ['minLength', 4, "Le login doit contenir au moins 4 caractères"]
+                ],
+                'password' => [
+                    'required',
+                    ['minLength', 4, "Le mot de passe doit contenir au moins 4 caractères"]
+                ]
+            ];
 
-            if (!Validator::isValid()) {
-                $this->session->set('errors', Validator::getErrors());
+            $validator = Validator::getInstance();
+            if (!$validator->validate($loginData, $rules)) {
+                $this->session->set('errors', $validator->getErrors());
                 header('Location: ' . $this->url . '/');
                 exit();
             }
 
             try {
-                $user = $this->securityService->login($login, $password);
-                if (!$user) throw new Exception('auth');
+                $user = $this->securityService->login($loginData['login'], $loginData['password']);
+                if (!$user) {
+                    $validator->addError('password', "Identifiant incorrect");
+                    $this->session->set('errors', $validator->getErrors());
+                    header('Location: ' . $this->url . '/');
+                    exit();
+                }
 
                 $this->session->set('user', $user->toArray());
                 $this->session->set('typeuser', $user->getId());
                 $userType = $user->getTypeUser()->value;
 
                 if ($userType === 'client') {
-                    $this->session->set('success', Validator::$fields['success_client']);
                     header('Location: ' . $this->url . '/solde');
                 } elseif ($userType === 'serviceCommercial') {
-                    $this->session->set('success', Validator::$fields['success_vendeur']);
+                    // Redirection spécifique si besoin
                 } else {
-                    $this->session->set('success', Validator::$fields['success_default']);
                     header('Location: ' . $this->url . '/solde');
                 }
                 exit();
             } catch (Exception $e) {
-                $key = $e->getMessage() === 'auth' ? 'auth' : 'system';
-                Validator::addError($key, Validator::$fields[$key]);
-                $this->session->set('errors', Validator::getErrors());
+                $validator->addError('system', "Erreur système");
+                $this->session->set('errors', $validator->getErrors());
                 header('Location: ' . $this->url . '/');
                 exit();
             }
@@ -80,7 +94,6 @@ class SecuriteController extends AbstracteController
             $this->render('login/login', ['errors' => $errors]);
         }
     }
-
 
     public function Inscription()
     {
@@ -94,16 +107,11 @@ class SecuriteController extends AbstracteController
         ]);
     }
 
-
     public function destroy()
     {
         $this->session->destroy('user');
         header('Location: ' . $this->url . '/');
         exit();
     }
-
-    public static function getInstance()
-    {
-        return new self();
-    }
+    
 }

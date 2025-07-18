@@ -5,7 +5,7 @@ namespace App\Ripository;
 
 use PDO;
 use App\Core\AbstracteRipository;
-
+use App\Entity\Transaction;
 class TransactionRipository extends AbstracteRipository
 {
 
@@ -48,7 +48,7 @@ class TransactionRipository extends AbstracteRipository
 
         $transactions = [];
         while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
-            $transactions[] = \App\Entity\Transaction::toObject($row);
+            $transactions[] = Transaction::toObject($row);
         }
         return $transactions;
     }

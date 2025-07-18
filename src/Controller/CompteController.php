@@ -31,11 +31,36 @@ class CompteController extends AbstracteController
     public function store()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            Validator::resetErrors();
-            Validator::validateInscription($_POST, $_FILES, $this->compteService);
+            $validator = Validator::getInstance();
 
-            if (!Validator::isValid()) {
-                $this->session->set('errors', Validator::getErrors());
+            $rules = [
+                'nom' => ['required'],
+                'prenom' => ['required'],
+                'login' => ['required'],
+                'password' => [
+                    'required',
+                    ['minLength', 6, "Le mot de passe doit contenir au moins 6 caractères"]
+                ],
+                'numeroCarteidentite' => [
+                    'required',
+                    'isCNI'
+                ],
+                'photorecto' => ['required'],
+                'photoverso' => ['required'],
+                'adresse' => ['required'],
+                'numerotel' => [
+                    'required',
+                    'isSenegalPhone'
+                ]
+            ];
+
+            // Fusionne $_POST et les noms de fichiers pour la validation
+            $data = $_POST;
+            $data['photorecto'] = $_FILES['photorecto']['name'] ?? '';
+            $data['photoverso'] = $_FILES['photoverso']['name'] ?? '';
+
+            if (!$validator->validate($data, $rules)) {
+                $this->session->set('errors', $validator->getErrors());
                 header('Location: ' . $this->url . '/inscription');
                 exit;
             }
@@ -80,7 +105,7 @@ class CompteController extends AbstracteController
         $userId = $user['id'];
 
         try {
-                $comptePrincipal = $this->compteService->getComptePrincipalByUserId($userId);
+            $comptePrincipal = $this->compteService->getComptePrincipalByUserId($userId);
             $this->render('Compte/solde', [
                 'comptePrincipal' => $comptePrincipal
             ]);
@@ -96,8 +121,8 @@ class CompteController extends AbstracteController
     {
         $user = $this->session->get('user');
         $userId = $user['id'];
-                $comptePrincipal = $this->compteService->getComptePrincipalByUserId($userId);
-              
+        $comptePrincipal = $this->compteService->getComptePrincipalByUserId($userId);
+
         $secondaires = $this->compteService->getComptesSecondaireByUserId((int)$userId);
         $this->render("Compte/AjouterCompte", [
             'comptes' => $comptePrincipal,
@@ -111,20 +136,34 @@ class CompteController extends AbstracteController
     public function ajouterCompteSecondaire()
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $validator = Validator::getInstance();
+
+            $rules = [
+                'numerotel' => [
+                    'required',
+                    'isSenegalPhone'
+                ],
+               
+            ];
+
+            if (!$validator->validate($_POST, $rules)) {
+                $this->session->set('errors', $validator->getErrors());
+                $this->session->set('openPopup', true);
+                header('Location: ' . $this->url . '/AjouterCompte');
+                exit;
+            }
+
             try {
                 $user = $this->session->get('user');
                 $userId = $user['id'];
                 $comptePrincipal = $this->compteService->getComptePrincipalByUserId($userId);
 
-                // Validation
-            Validator:: validateCompteSecondaire($_POST, $this->compteService);
-
-                if (!Validator::isValid()) {
-                    $this->session->set('errors', Validator::getErrors());
-                    $this->session->set('openPopup', true);
-                    header('Location: ' . $this->url . '/AjouterCompte');
-                    exit;
-                }
+                // if (!Validator::isValid()) {
+                //     $this->session->set('errors', Validator::getErrors());
+                //     $this->session->set('openPopup', true);
+                //     header('Location: ' . $this->url . '/AjouterCompte');
+                //     exit;
+                // }
 
                 $numerotel = $_POST['numerotel'];
                 $solde = isset($_POST['solde']) ? floatval($_POST['solde']) : 0;
@@ -164,8 +203,22 @@ class CompteController extends AbstracteController
     }
 
 
-    public static function getInstance()
-    {
-        return new self();
+public function changerComptePrincipal()
+{
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $user = $this->session->get('user');
+        $userId = $user['id'];
+        $compteSecondaireId = $_POST['compte_id'] ?? null;
+
+        if ($compteSecondaireId) {
+            $this->compteService->basculerEnprincipal($userId, (int)$compteSecondaireId);
+            $this->session->set('success', 'Le compte secondaire est maintenant principal.');
+        }
+        header('Location: ' . $this->url . '/AjouterCompte');
+        exit;
     }
+}
+
+
+  
 }

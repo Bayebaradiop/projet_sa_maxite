@@ -2,6 +2,8 @@
 namespace App\Core;
 abstract class AbstracteService
 {
+        use Singleton;
+
     protected AbstracteRipository $repository;
 
     public function __construct(AbstracteRipository $repository)
@@ -9,9 +11,6 @@ abstract class AbstracteService
         $this->repository = $repository;
     }
 
-    public static function getInstance(AbstracteRipository $repository): self
-    {
-        return new static($repository);
-    }
+
 }
 

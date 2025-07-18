@@ -8,3 +8,4 @@ enum TypeTransaction: string
     case Depot = 'depot';
     case Retrait = 'retrait';
 }
+

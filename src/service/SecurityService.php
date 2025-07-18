@@ -2,20 +2,20 @@
 
 namespace App\Service;
 
+use App\Core\Singleton;
 use App\Entity\Users;
 use Exception;
 use App\Ripository\UserRipository;
 
 class SecurityService
 {
+    use Singleton;
+
     private UserRipository $userRipository;
 
-
-
-    public function __construct(UserRipository $userRipository)
+    public function __construct()
     {
-
-        $this->userRipository = $userRipository;
+        $this->userRipository = \App\Core\App::getDependency('userRepository');
     }
 
     public function login(string $login, string $password): ?Users
@@ -25,10 +25,5 @@ class SecurityService
         } catch (Exception $e) {
             throw new Exception("Erreur lors de la connexion: " . $e->getMessage(), 0, $e);
         }
-    }
-    public static function getInstance()
-    {
-        $userRepo = \App\Core\App::getDependency('userRepository');
-        return new self($userRepo);
     }
 }

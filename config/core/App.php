@@ -21,7 +21,6 @@ class App
         $dependencies = [
             'core' => [
                 'database' => \App\Core\Database::class,
-                'validator' => \App\Core\Validator::class,
                 'session' => \App\Core\Session::class,
                 'router' => \App\Core\Router::class,
             ],

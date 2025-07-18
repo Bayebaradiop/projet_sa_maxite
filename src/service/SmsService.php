@@ -2,10 +2,13 @@
 
 namespace App\Service;
 
+use App\Core\Singleton;
 use Twilio\Rest\Client;
 
 class SmsService
 {
+    use Singleton;
+
     public function sendSms(string $destinationNumber, string $message): void
     {
         $sid    = TWILIO_SID;
@@ -25,11 +28,7 @@ class SmsService
                 ]
             );
         } catch (\Exception $e) {
+            // Gestion d'erreur éventuelle
         }
-    }
-
-    public static function getInstance(): self
-    {
-        return new self();
     }
 }

@@ -1,8 +1,7 @@
 <?php
 
 namespace App\Core;
-
-require_once __DIR__ . '/../middleware.php';
+use App\Config\Middleware;
 
 class Router
 {
@@ -17,12 +16,9 @@ class Router
             $method = $route['method'];
 
             if (isset($route['middleware'])) {
-                if (is_array($route['middleware'])) {
-                    foreach ($route['middleware'] as $middleware) {
-                        sama_middlewear($middleware);
-                    }
-                } else {
-                    sama_middlewear($route['middleware']);
+                $middlewares = Middleware::getMiddlewares();
+                if (isset($middlewares[$route['middleware']])) {
+                    $middlewares[$route['middleware']](); 
                 }
             }
 

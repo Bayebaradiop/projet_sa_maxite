@@ -21,7 +21,6 @@ class TransactionController extends AbstracteController
         $user = $this->session->get('user');
         $userId = $user['id'];
         $transactions = $this->transactionService->getLast10TransactionsByUserId($userId);
-
         $this->render('Transaction/historique10derniere', [
             'transactions' => $transactions
         ]);
@@ -61,8 +60,5 @@ class TransactionController extends AbstracteController
     {
         // Logique pour mettre à jour une transaction
     }
-    public static function getInstance()
-    {
-        return new self();
-    }
+ 
 }
