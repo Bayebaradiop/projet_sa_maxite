@@ -17,7 +17,7 @@ class TransactionRipository extends AbstracteRipository
     public function getLast10Transactions($userId): array
     {
         $sql = "SELECT t.* 
-            FROM transaction t
+            FROM transactions t
             INNER JOIN compte c ON t.compteid = c.id
             WHERE c.userid = :userid and c.typecompte='principal'
             ORDER BY t.date DESC
@@ -37,7 +37,7 @@ class TransactionRipository extends AbstracteRipository
    public function afficheTOusLesTransactions($userId): array
     {
         $sql = "SELECT t.* 
-            FROM transaction t
+            FROM transactions t
             INNER JOIN compte c ON t.compteid = c.id
             WHERE c.userid = :userid and c.typecompte='principal'
             ORDER BY t.date DESC

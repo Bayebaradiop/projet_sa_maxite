@@ -41,7 +41,6 @@ class TransactionController extends AbstracteController
     public function destroy() {}
     public function create()
     {
-        // Logique pour créer une transaction
     }
     public function edit()
     {

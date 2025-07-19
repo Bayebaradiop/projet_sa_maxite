@@ -25,6 +25,7 @@
         "twilio/sdk": "^8.6"
     },
     "scripts": {
-        "database:migrate": "php migration.php"
+        "database:migrate": "php migrations/Migration.php",
+        "database:seed": "php seeders/seeder.php"
     }
 }

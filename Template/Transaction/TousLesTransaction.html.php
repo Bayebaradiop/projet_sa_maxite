@@ -32,7 +32,8 @@
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200">
-    <?php foreach ($transactions as $transaction): ?>
+    <?php if (!empty($transactions)): ?>
+        <?php foreach ($transactions as $transaction): ?>
         <tr class="hover:bg-gray-50">
             <td class="py-4 px-6 text-gray-600"><?= htmlspecialchars($transaction->getDate()->format('d/m/Y')) ?></td>
             <td class="py-4 px-6">
@@ -62,31 +63,50 @@
                 <?= $transaction->getMontant() < 0 ? '' : '+' ?><?= number_format(abs($transaction->getMontant()), 0, ',', ' ') ?> CFA
             </td>
         </tr>
-    <?php endforeach; ?>
+        <?php endforeach; ?>
+    <?php else: ?>
+        <tr>
+            <td colspan="4" class="py-4 px-6 text-center text-gray-500">
+                Aucune transaction trouvée.
+            </td>
+        </tr>
+    <?php endif; ?>
 </tbody>
                     </table>
                 </div>
                 
                 <!-- Pagination -->
                 <div class="mt-6 flex justify-center">
-                    <nav class="flex items-center space-x-2">
-                        <button class="px-3 py-2 text-gray-500 hover:text-gray-700">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                        </button>
-                        <button class="px-3 py-2 bg-maxitsa-orange text-white rounded font-medium">1</button>
-                        <button class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded">2</button>
-                        <button class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded">3</button>
-                        <button class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded">4</button>
-                        <button class="px-3 py-2 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded">5</button>
-                        <button class="px-3 py-2 text-gray-500 hover:text-gray-700">
-                            <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
-                            </svg>
-                        </button>
-                    </nav>
-                </div>
+    <nav class="flex items-center space-x-2">
+        <!-- Bouton page précédente -->
+        <?php if ($currentPage > 1): ?>
+            <a href="?page=<?= $currentPage - 1 ?><?= isset($_GET['date-filter']) ? '&date-filter=' . urlencode($_GET['date-filter']) : '' ?><?= isset($_GET['type-filter']) ? '&type-filter=' . urlencode($_GET['type-filter']) : '' ?>"
+               class="px-3 py-2 text-gray-500 hover:text-gray-700">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path>
+                </svg>
+            </a>
+        <?php endif; ?>
+
+        <!-- Boutons de pages -->
+        <?php for ($i = 1; $i <= $totalPages; $i++): ?>
+            <a href="?page=<?= $i ?><?= isset($_GET['date-filter']) ? '&date-filter=' . urlencode($_GET['date-filter']) : '' ?><?= isset($_GET['type-filter']) ? '&type-filter=' . urlencode($_GET['type-filter']) : '' ?>"
+               class="px-3 py-2 <?= $currentPage == $i ? 'bg-maxitsa-orange text-white' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-100' ?> rounded font-medium">
+                <?= $i ?>
+            </a>
+        <?php endfor; ?>
+
+        <!-- Bouton page suivante -->
+        <?php if ($currentPage < $totalPages): ?>
+            <a href="?page=<?= $currentPage + 1 ?><?= isset($_GET['date-filter']) ? '&date-filter=' . urlencode($_GET['date-filter']) : '' ?><?= isset($_GET['type-filter']) ? '&type-filter=' . urlencode($_GET['type-filter']) : '' ?>"
+               class="px-3 py-2 text-gray-500 hover:text-gray-700">
+                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                </svg>
+            </a>
+        <?php endif; ?>
+    </nav>
+</div>
             </main>
 
 <script>

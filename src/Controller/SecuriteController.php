@@ -79,7 +79,6 @@ class SecuriteController extends AbstracteController
                 if ($userType === 'client') {
                     header('Location: ' . $this->url . '/solde');
                 } elseif ($userType === 'serviceCommercial') {
-                    // Redirection spécifique si besoin
                 } else {
                     header('Location: ' . $this->url . '/solde');
                 }
