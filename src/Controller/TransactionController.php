@@ -1,6 +1,5 @@
 <?php
 
-
 namespace App\Controller;
 
 use App\Core\AbstracteController;
@@ -8,7 +7,7 @@ use App\Core\App;
 
 class TransactionController extends AbstracteController
 {
-    private  $transactionService;
+    private $transactionService;
 
     public function __construct()
     {
@@ -38,6 +37,28 @@ class TransactionController extends AbstracteController
         ]);
     }
 
+    public function depot()
+    {
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $user = $this->session->get('user');
+            $userId = $user['id'];
+            $numeroTel = $_POST['numerotel'] ?? '';
+            $montant = floatval($_POST['montant'] ?? 0);
+
+            try {
+                $this->transactionService->depotParTelephone($userId, $numeroTel, $montant);
+                $this->session->set('success', 'Dépôt effectué avec succès.');
+            } catch (\Exception $e) {
+                $this->session->set('errors', ['message' => $e->getMessage()]);
+            }
+            // Redirige vers l'historique après le dépôt
+            $url = getenv('URL') ?: '';
+            header('Location: ' . $url . '/historique');
+            exit;
+        }
+        // Affiche la page de dépôt si GET
+        $this->render('Transaction/historique10derniere');
+    }
     public function destroy() {}
     public function create()
     {
@@ -59,5 +80,8 @@ class TransactionController extends AbstracteController
     {
         // Logique pour mettre à jour une transaction
     }
+
+
+    
  
 }

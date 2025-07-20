@@ -10,20 +10,17 @@ class Transaction
     private \DateTime $date;
     private TypeTransaction $typeTransaction;
     private float $montant;
-    private int $compteId;
     private ?Compte $compte;
 
     public function __construct(
         \DateTime $date,
         TypeTransaction $typeTransaction,
         float $montant,
-        int $compteId,
         ?Compte $compte = null
     ) {
         $this->date = $date;
         $this->typeTransaction = $typeTransaction;
         $this->montant = $montant;
-        $this->compteId = $compteId;
         $this->compte = $compte;
     }
 
@@ -67,15 +64,6 @@ class Transaction
         $this->montant = $montant;
     }
 
-    public function getCompteId(): int
-    {
-        return $this->compteId;
-    }
-    public function setCompteId(int $compteId): void
-    {
-        $this->compteId = $compteId;
-    }
-
     public function toArray(): array
     {
         return [
@@ -83,17 +71,21 @@ class Transaction
             'date' => $this->date->format('Y-m-d H:i:s'),
             'typeTransaction' => $this->typeTransaction->value,
             'montant' => $this->montant,
-            'compteId' => $this->compteId,
         ];
     }
 
     public static function toObject(array $data): self
     {
+        $compte = null;
+        if (isset($data['compte']) && is_array($data['compte'])) {
+            $compte = \App\Entity\Compte::toObject($data['compte']);
+        }
+    
         return new self(
             new \DateTime($data['date']),
             TypeTransaction::from($data['typetransaction']),
             (float)$data['montant'],
-            (int)$data['compteId']
+            $compte
         );
     }
 }

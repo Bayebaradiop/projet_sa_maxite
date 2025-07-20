@@ -10,7 +10,7 @@ class CompteService
 
     public function __construct()
     {
-        $this->compteRipository = App::getDependency('compteRepository');
+        $this->compteRipository = App::getDependency('CompteRipository');
     }
 
     public function getComptesByUserId(int $userId): array
@@ -64,4 +64,5 @@ public function basculerEnprincipal(int $userId, int $compteSecondaireId): void
 {
     $this->compteRipository->basculerEnprincipal($userId, $compteSecondaireId);
 }
+
 }

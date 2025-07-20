@@ -65,4 +65,10 @@ return [
         'method' => 'changerComptePrincipal',
         'middleware' => 'auth'
     ],
+
+    '/depot' => [
+        'controller' => App::getDependency('TransactionController'),
+        'method' => 'depot',
+        'middleware' => 'auth'
+    ],
 ];

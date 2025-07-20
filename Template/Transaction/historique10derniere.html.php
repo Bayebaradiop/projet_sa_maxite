@@ -1,5 +1,25 @@
 <div class="flex h-screen">
     <div class="flex-1 p-8">
+
+        <!-- Messages de succès/erreur -->
+        <?php if (isset($_SESSION['errors'])): ?>
+            <div class="bg-red-100 text-red-700 px-4 py-2 rounded mb-4">
+                <?= htmlspecialchars($_SESSION['errors']['message'] ?? 'Erreur lors du dépôt.') ?>
+            </div>
+            <?php unset($_SESSION['errors']); ?>
+        <?php endif; ?>
+
+        <?php if (isset($_SESSION['success'])): ?>
+            <div class="bg-green-100 text-green-700 px-4 py-2 rounded mb-4">
+                <?= htmlspecialchars($_SESSION['success']) ?>
+            </div>
+            <?php unset($_SESSION['success']); ?>
+        <?php endif; ?>
+
+        <!-- Bouton pour ouvrir le popup -->
+        <button id="openDepotPopup" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg mb-4">
+            Faire un dépôt
+        </button>
         <div class="grid grid-cols-5 gap-4 mb-8">
             <div class="card-pattern-black bg-gradient-to-br from-orange-500 to-orange-400 rounded-2xl h-20 shadow-lg"></div>
             <div class="card-pattern bg-gradient-to-br from-orange-500 to-orange-400 rounded-2xl h-20 shadow-lg"></div>
@@ -74,3 +94,41 @@
         </div>
     </div>
 </div>
+
+<!-- Popup dépôt (masqué par défaut) -->
+<div id="depotPopup" class="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50 hidden">
+    <div class="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+        <h2 class="text-xl font-bold mb-4 text-gray-700">Faire un dépôt</h2>
+        <form method="post" action="/depot" autocomplete="off">
+            <div class="mb-4">
+                <label class="block text-gray-600 mb-1">Numéro de téléphone destinataire</label>
+                <input type="text" name="numerotel" class="w-full border rounded px-3 py-2" required autocomplete="off">
+            </div>
+            <div class="mb-4">
+                <label class="block text-gray-600 mb-1">Montant</label>
+                <input type="number" name="montant" class="w-full border rounded px-3 py-2" min="1" required autocomplete="off">
+            </div>
+            <div class="flex justify-end space-x-2">
+                <button type="button" id="closeDepotPopup" class="px-4 py-2 bg-gray-300 rounded">Annuler</button>
+                <button type="submit" class="px-4 py-2 bg-green-600 text-white rounded">Valider</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<?php if (isset($_SESSION['success']) || isset($_SESSION['errors'])): ?>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        document.getElementById('depotPopup').classList.add('hidden');
+    });
+</script>
+<?php endif; ?>
+
+<script>
+document.getElementById('openDepotPopup').onclick = function() {
+    document.getElementById('depotPopup').classList.remove('hidden');
+};
+document.getElementById('closeDepotPopup').onclick = function() {
+    document.getElementById('depotPopup').classList.add('hidden');
+};
+</script>

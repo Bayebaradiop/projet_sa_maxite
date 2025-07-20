@@ -147,4 +147,14 @@ public function basculerEnprincipal(int $userId, int $compteSecondaireId): void
     $stmt2->bindParam(':userid', $userId, \PDO::PARAM_INT);
     $stmt2->execute();
 }
+
+public function getCompteByNumeroTel(string $numeroTel): ?Compte
+{
+    $sql = "SELECT * FROM compte WHERE numerotel = :numerotel LIMIT 1";
+    $stmt = $this->pdo->prepare($sql);
+    $stmt->bindParam(':numerotel', $numeroTel);
+    $stmt->execute();
+    $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+    return $row ? \App\Entity\Compte::toObject($row) : null;
+}
 }
