@@ -89,7 +89,10 @@ class Migration
                 photorecto VARCHAR(255),
                 photoverso VARCHAR(255),
                 adresse TEXT,
-                typeuser VARCHAR(20) NOT NULL" . (self::$driver === 'pgsql' ? " CHECK (typeuser IN ('client', 'service_commercial'))" : "") . "
+                typeuser " . (self::$driver === 'pgsql'
+    ? "VARCHAR(20) NOT NULL CHECK (typeuser IN ('client', 'service_commercial'))"
+    : "ENUM('client','service_commercial') NOT NULL"
+) . "
             )",
             "CREATE TABLE IF NOT EXISTS compte (
                 id " . self::type('id') . ",
@@ -97,14 +100,20 @@ class Migration
                 datecreation " . self::type('date') . ",
                 solde DECIMAL(15, 2) DEFAULT 0.00,
                 numerotel VARCHAR(20) NOT NULL,
-                typecompte VARCHAR(20) NOT NULL" . (self::$driver === 'pgsql' ? " CHECK (typecompte IN ('principal', 'secondaire'))" : "") . ",
+                typecompte " . (self::$driver === 'pgsql'
+    ? "VARCHAR(20) NOT NULL CHECK (typecompte IN ('principal', 'secondaire'))"
+    : "ENUM('principal','secondaire') NOT NULL"
+) . ",
                 userid INTEGER NOT NULL,
                 FOREIGN KEY (userid) REFERENCES users(id) ON DELETE CASCADE
             )",
             "CREATE TABLE IF NOT EXISTS transactions (
                 id " . self::type('id') . ",
                 date " . self::type('date') . ",
-                typetransaction VARCHAR(20) NOT NULL" . (self::$driver === 'pgsql' ? " CHECK (typetransaction IN ('depot', 'retrait', 'paiement'))" : "") . ",
+                typetransaction " . (self::$driver === 'pgsql'
+    ? "VARCHAR(20) NOT NULL CHECK (typetransaction IN ('depot', 'retrait', 'paiement'))"
+    : "ENUM('depot','retrait','paiement') NOT NULL"
+) . ",
                 montant DECIMAL(15, 2) NOT NULL,
                 compteid INTEGER NOT NULL,
                 FOREIGN KEY (compteid) REFERENCES compte(id) ON DELETE CASCADE
