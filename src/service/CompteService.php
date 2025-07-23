@@ -3,34 +3,36 @@
 namespace App\Service;
 
 use App\Core\App;
+use App\Ripository\CompteRipository;
 
 class CompteService
 {
-    private  $compteRipository;
+    private  $compteRepository;
 
-    public function __construct()
+    public function __construct(CompteRipository $compteRepository)
     {
-        $this->compteRipository = App::getDependency('CompteRipository');
+        $this->compteRepository = $compteRepository;
+
     }
 
     public function getComptesByUserId(int $userId): array
     {
-        return $this->compteRipository->findByUserId($userId);
+        return $this->compteRepository->findByUserId($userId);
     }
 
     public function insertUserAndCompte(array $userData, array $compteData): bool
     {
-        return $this->compteRipository->insertUserAndCompte($userData, $compteData);
+        return $this->compteRepository->insertUserAndCompte($userData, $compteData);
     }
 
     public function isPhoneUnique(string $phone): bool
     {
-        return $this->compteRipository->isPhoneUnique($phone);
+        return $this->compteRepository->isPhoneUnique($phone);
     }
 
     public function isCniUnique(string $cni): bool
     {
-        return $this->compteRipository->isCniUnique($cni);
+        return $this->compteRepository->isCniUnique($cni);
     }
 
     public static function getInstance(): self
@@ -40,29 +42,29 @@ class CompteService
 
     public function ajouterCompteSecondaire(array $data): bool
     {
-        return $this->compteRipository->ajouterSecondaire($data);
+        return $this->compteRepository->ajouterSecondaire($data);
     }
 
     public function getComptePrincipalByUserId(int $userId): ?\App\Entity\Compte
     {
-        return $this->compteRipository->getComptePrincipalByUserId($userId);
+        return $this->compteRepository->getComptePrincipalByUserId($userId);
     }
 
 
     public function retirerSolde(int $compteId, float $montant): bool
     {
-        return $this->compteRipository->retirerSolde($compteId, $montant);
+        return $this->compteRepository->retirerSolde($compteId, $montant);
     }
 
     public function getComptesSecondaireByUserId(int $userId): array
     {
-        return $this->compteRipository->getComptesSecondaireByUserId($userId);
+        return $this->compteRepository->getComptesSecondaireByUserId($userId);
     }
 
 
 public function basculerEnprincipal(int $userId, int $compteSecondaireId): void
 {
-    $this->compteRipository->basculerEnprincipal($userId, $compteSecondaireId);
+    $this->compteRepository->basculerEnprincipal($userId, $compteSecondaireId);
 }
 
 }

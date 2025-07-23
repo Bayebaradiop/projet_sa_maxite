@@ -23,5 +23,5 @@ controllers:
 
 repositories:
   userRepository: App\Ripository\UserRipository
-  CompteRipository: App\Ripository\CompteRipository
+  compteRepository: App\Ripository\CompteRipository
   TransactionRipository: App\Ripository\TransactionRipository

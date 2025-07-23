@@ -9,7 +9,7 @@ class Users
     private string $prenom;
     private string $login;
     private string $password;
-    private string $numeroCarteIdentite;
+    private string $numerocarteidentite;
     private ?string $photoRecto = null;
     private ?string $photoVerso = null;
     private string $adresse;
@@ -21,7 +21,7 @@ class Users
         string $prenom,
         string $login,
         string $password,
-        string $numeroCarteIdentite,
+        string $numerocarteidentite,
         string $adresse,
         TypeUser $typeUser,
         ?string $photoRecto = null,
@@ -31,7 +31,7 @@ class Users
         $this->prenom = $prenom;
         $this->login = $login;
         $this->password = $password;
-        $this->numeroCarteIdentite = $numeroCarteIdentite;
+        $this->numerocarteidentite = $numerocarteidentite;
         $this->adresse = $adresse;
         $this->typeUser = $typeUser;
         $this->photoRecto = $photoRecto;
@@ -81,13 +81,13 @@ class Users
         $this->password = $password;
     }
 
-    public function getNumeroCarteIdentite(): string
+    public function getnumerocarteidentite(): string
     {
-        return $this->numeroCarteIdentite;
+        return $this->numerocarteidentite;
     }
-    public function setNumeroCarteIdentite(string $numeroCarteIdentite): void
+    public function setnumerocarteidentite(string $numerocarteidentite): void
     {
-        $this->numeroCarteIdentite = $numeroCarteIdentite;
+        $this->numerocarteidentite = $numerocarteidentite;
     }
 
     public function getPhotoRecto(): ?string
@@ -143,7 +143,7 @@ class Users
             'prenom' => $this->prenom,
             'login' => $this->login,
             'password' => $this->password,
-            'numeroCarteIdentite' => $this->numeroCarteIdentite,
+            'numerocarteidentite' => $this->numerocarteidentite,
             'photoRecto' => $this->photoRecto,
             'photoVerso' => $this->photoVerso,
             'adresse' => $this->adresse,
@@ -159,7 +159,7 @@ class Users
             $data['prenom'] ?? '',
             $data['login'] ?? '',
             $data['password'] ?? '',
-            $data['numeroCarteIdentite'] ?? '',
+            $data['numerocarteidentite'] ?? '',
             $data['adresse'] ?? '',
             TypeUser::from($data['typeUser'] ?? 'client'),
             $data['photoRecto'] ?? null,

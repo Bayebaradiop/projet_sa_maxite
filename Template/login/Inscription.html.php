@@ -59,10 +59,10 @@
 
         <!-- Numéro de Carte d'identité -->
         <div class="mb-5">
-          <label class="block text-gray-700 font-medium mb-2" for="numeroCarteidentite">Numéro de carte d'identité *</label>
-          <input type="text" id="numeroCarteidentite" name="numeroCarteidentite" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition">
-          <?php if (!empty($errors['numeroCarteidentite'])): ?>
-            <?php foreach ($errors['numeroCarteidentite'] as $error): ?>
+          <label class="block text-gray-700 font-medium mb-2" for="numerocarteidentite">Numéro de carte d'identité *</label>
+          <input type="text" id="numerocarteidentite" name="numerocarteidentite" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition">
+          <?php if (!empty($errors['numerocarteidentite'])): ?>
+            <?php foreach ($errors['numerocarteidentite'] as $error): ?>
               <div class="text-red-600 text-sm"><?= htmlspecialchars($error) ?></div>
             <?php endforeach; ?>
           <?php endif; ?>
