@@ -4,17 +4,15 @@ namespace App\Controller;
 
 use App\Core\AbstracteController;
 use App\Core\App;
-use App\Service\TransactionService;
-use App\Core\Session;
 
 class TransactionController extends AbstracteController
 {
     private $transactionService;
 
-    public function __construct(TransactionService $transactionService)
+    public function __construct()
     {
         parent::__construct();
-        $this->transactionService=$transactionService;
+        $this->transactionService = App::getDependency('transactionService');
     }
 
     public function index()

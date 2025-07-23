@@ -6,8 +6,6 @@ use App\Core\AbstracteController;
 use App\Core\App;
 use App\Core\Validator;
 use App\middlewares\CryptPassword;
-use App\Service\CompteService;
-use App\Service\SmsService;
 
 class CompteController extends AbstracteController
 {
@@ -15,11 +13,11 @@ class CompteController extends AbstracteController
     private $smsService;
     private $url;
 
-    public function __construct(CompteService $compteService, SmsService $smsService)
+    public function __construct()
     {
         parent::__construct();
-        $this->compteService = $compteService;
-        $this->smsService = $smsService;
+        $this->compteService = App::getDependency('compteService');
+        $this->smsService = App::getDependency('smsService');
         $this->url = getenv('URL');
     }
 
@@ -43,7 +41,7 @@ class CompteController extends AbstracteController
                     'required',
                     ['minLength', 6, "Le mot de passe doit contenir au moins 6 caractères"]
                 ],
-                'numerocarteidentite' => [
+                'numeroCarteidentite' => [
                     'required',
                     'isCNI'
                 ],
@@ -72,7 +70,7 @@ class CompteController extends AbstracteController
                 'prenom' => $_POST['prenom'],
                 'login' => $_POST['login'],
                 'password' => CryptPassword::crypt($_POST['password']),
-                'numerocarteidentite' => $_POST['numerocarteidentite'],
+                'numeroCarteidentite' => $_POST['numeroCarteidentite'],
                 'photorecto' => $_FILES['photorecto']['name'] ?? '',
                 'photoverso' => $_FILES['photoverso']['name'] ?? '',
                 'adresse' => $_POST['adresse'],

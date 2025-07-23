@@ -6,20 +6,18 @@ use App\Core\App;
 use App\Core\Validator;
 use Exception;
 use App\Core\AbstracteController;
-use App\Service\SecurityService;
-use App\Core\Session;
 
 class SecuriteController extends AbstracteController
 {
     private $securityService;
     private $url;
 
-    public function __construct(SecurityService $securityService, Session $session)
+    public function __construct()
     {
-        parent::__construct( );
+        parent::__construct();
         $this->layout = 'securite';
-        $this->session = $session;
-        $this->securityService = $securityService;
+        $this->session = App::getDependency('session');
+        $this->securityService = App::getDependency('securityService');
         $this->url = getenv('URL');
     }
 
