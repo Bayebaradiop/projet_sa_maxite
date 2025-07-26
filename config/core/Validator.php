@@ -189,14 +189,14 @@ class Validator
                 }
             },
             "isSenegalPhone" => function ($key, $value, $message = "Numéro de téléphone invalide") {
-                $value = preg_replace('/\D/', '', $value);
+                $value = preg_replace('/\D/', '', $value ?? '');
                 $prefixes = ['70', '75', '76', '77', '78'];
                 if (!(strlen($value) === 9 && in_array(substr($value, 0, 2), $prefixes))) {
                     self::addError($key, $message);
                 }
             },
             "isCNI" => function ($key, $value, $message = "Numéro de CNI invalide") {
-                $value = preg_replace('/\D/', '', $value);
+                $value = preg_replace('/\D/', '', $value ?? '');
                 if (!preg_match('/^1\d{12}$/', $value)) {
                     self::addError($key, $message);
                 }
@@ -248,6 +248,4 @@ class Validator
     {
         return self::$errors;
     }
-
-    
 }
