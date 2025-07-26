@@ -157,6 +157,7 @@ use App\App;
 
 
 
+
 class Validator
 {
     private static array $errors = [];
@@ -248,4 +249,6 @@ class Validator
     {
         return self::$errors;
     }
+
+    
 }

@@ -32,15 +32,15 @@ class CompteRipository extends AbstracteRipository
         try {
             $this->pdo->beginTransaction();
 
-            $sqlUser = "INSERT INTO users (nom, prenom, login, password, numeroCarteidentite, photorecto, photoverso, adresse, typeuser)
-                    VALUES (:nom, :prenom, :login, :password, :numeroCarteidentite, :photorecto, :photoverso, :adresse, :typeuser)";
+            $sqlUser = "INSERT INTO users (nom, prenom, login, password, numerocarteidentite, photorecto, photoverso, adresse, typeuser)
+                    VALUES (:nom, :prenom, :login, :password, :numerocarteidentite, :photorecto, :photoverso, :adresse, :typeuser)";
             $stmtUser = $this->pdo->prepare($sqlUser);
             $stmtUser->execute([
                 ':nom' => $userData['nom'],
                 ':prenom' => $userData['prenom'],
                 ':login' => $userData['login'],
                 ':password' => $userData['password'],
-                ':numeroCarteidentite' => $userData['numeroCarteidentite'],
+                ':numerocarteidentite' => $userData['numerocarteidentite'],
                 ':photorecto' => $userData['photorecto'],
                 ':photoverso' => $userData['photoverso'],
                 ':adresse' => $userData['adresse'],
@@ -79,7 +79,7 @@ class CompteRipository extends AbstracteRipository
 
     public function isCniUnique(string $cni): bool
     {
-        $sql = "SELECT COUNT(*) FROM users WHERE numeroCarteidentite = :cni";
+        $sql = "SELECT COUNT(*) FROM users WHERE numerocarteidentite = :cni";
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':cni', $cni);
         $stmt->execute();
