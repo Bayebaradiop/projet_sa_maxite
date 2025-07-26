@@ -41,7 +41,7 @@ class CompteController extends AbstracteController
                     'required',
                     ['minLength', 6, "Le mot de passe doit contenir au moins 6 caractères"]
                 ],
-                'numeroCarteidentite' => [
+                'numerocarteidentite' => [
                     'required',
                     'isCNI'
                 ],
@@ -70,7 +70,7 @@ class CompteController extends AbstracteController
                 'prenom' => $_POST['prenom'],
                 'login' => $_POST['login'],
                 'password' => CryptPassword::crypt($_POST['password']),
-                'numeroCarteidentite' => $_POST['numeroCarteidentite'],
+                'numerocarteidentite' => $_POST['numerocarteidentite'],
                 'photorecto' => $_FILES['photorecto']['name'] ?? '',
                 'photoverso' => $_FILES['photoverso']['name'] ?? '',
                 'adresse' => $_POST['adresse'],
