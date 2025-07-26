@@ -112,3 +112,14 @@
         </div>
     </div>
 </div>
+
+<script>
+    // Exemple de script pour l'API
+    const nci = 'votre_valeur_nci'; // Remplacez par la valeur appropriée
+    const apiUrl = `/proxy-citoyen.php?nci=${encodeURIComponent(nci)}`;
+
+    // Fonction pour afficher le mot de passe oublié
+    function showForgotPassword() {
+        alert('Fonctionnalité "Mot de passe oublié ?" à implémenter.');
+    }
+</script>

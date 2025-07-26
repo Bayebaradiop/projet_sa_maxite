@@ -6,9 +6,7 @@ $dotenv->load();
 define('URL', $_ENV['URL']);
 define('IMG_DIR', $_ENV['IMG_DIR']);
 
-define("DB_HOST", $_ENV["DB_HOST"]);
-define("DB_PORT", $_ENV["DB_PORT"]);
-define("DB_DATABASE", $_ENV["DB_DATABASE"]); 
+ 
 define("DB_USERNAME", $_ENV["DB_USERNAME"]); 
 define("DB_PASSWORD", $_ENV["DB_PASSWORD"]);
 define("TWILIO_SID", $_ENV["TWILIO_SID"]);

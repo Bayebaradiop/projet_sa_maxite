@@ -1,14 +1,16 @@
 <?php
 namespace App\Core;
+
 use PDO;
-class AbstracteRipository{
+
+abstract class AbstracteRipository
+{
     protected PDO $pdo;
-    public function __construct()
+
+    public function __construct(PDO $pdo)
     {
-        $this->pdo = App::getDependency('database');
+        $this->pdo = $pdo;
     }
-
-
 }
 
 

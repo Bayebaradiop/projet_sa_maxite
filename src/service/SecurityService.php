@@ -2,20 +2,17 @@
 
 namespace App\Service;
 
-use App\Core\Singleton;
 use App\Entity\Users;
 use Exception;
 use App\Ripository\UserRipository;
 
 class SecurityService
 {
-    use Singleton;
-
     private UserRipository $userRipository;
 
-    public function __construct()
+    public function __construct(UserRipository $userRipository)
     {
-        $this->userRipository = \App\Core\App::getDependency('userRepository');
+        $this->userRipository = $userRipository;
     }
 
     public function login(string $login, string $password): ?Users

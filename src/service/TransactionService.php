@@ -2,22 +2,19 @@
 
 namespace App\Service;
 
-use App\Core\Singleton;
 use App\Ripository\TransactionRipository;
 use App\Ripository\CompteRipository;
 use Exception;
 
 class TransactionService
 {
-    use Singleton;
-
     private TransactionRipository $transactionRepo;
     private CompteRipository $compteRepo;
 
-    public function __construct()
+    public function __construct(TransactionRipository $transactionRepo, CompteRipository $compteRepo)
     {
-        $this->transactionRepo = \App\Core\App::getDependency('TransactionRipository');
-        $this->compteRepo = \App\Core\App::getDependency('CompteRipository');
+        $this->transactionRepo = $transactionRepo;
+        $this->compteRepo = $compteRepo;
     }
 
     public function getLast10TransactionsByUserId(int $userId): array

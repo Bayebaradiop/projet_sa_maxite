@@ -8,10 +8,9 @@ use App\Core\AbstracteRipository;
 
 class CompteRipository extends AbstracteRipository
 {
-
-    public function __construct()
+    public function __construct(PDO $pdo)
     {
-        parent::__construct();
+        parent::__construct($pdo);
     }
     
     public function getComptePrincipalByUserId($userId): ?Compte
@@ -69,7 +68,6 @@ class CompteRipository extends AbstracteRipository
         }
     }
 
-
     public function isPhoneUnique(string $phone): bool
     {
         $sql = "SELECT COUNT(*) FROM compte WHERE numerotel = :phone";
@@ -88,12 +86,6 @@ class CompteRipository extends AbstracteRipository
         return $stmt->fetchColumn() == 0;
     }
 
-    public static function getInstance(): self
-    {
-        return new self();
-    }
-
-
     public function ajouterSecondaire(array $data): bool
     {
         $sql = "INSERT INTO compte (numero, datecreation, solde, numerotel, typecompte, userid)
@@ -107,9 +99,6 @@ class CompteRipository extends AbstracteRipository
             ':userid' => $data['userid']
         ]);
     }
-
-
-
 
     public function retirerSolde(int $compteId, float $montant): bool
     {
@@ -135,26 +124,26 @@ class CompteRipository extends AbstracteRipository
         return $comptes;
     }
 
-public function basculerEnprincipal(int $userId, int $compteSecondaireId): void
-{
-    $sql1 = "UPDATE compte SET typecompte = 'secondaire' WHERE userid = :userid AND typecompte = 'principal'";
-    $stmt1 = $this->pdo->prepare($sql1);
-    $stmt1->bindParam(':userid', $userId, \PDO::PARAM_INT);
-    $stmt1->execute();
-    $sql2 = "UPDATE compte SET typecompte = 'principal' WHERE id = :id AND userid = :userid";
-    $stmt2 = $this->pdo->prepare($sql2);
-    $stmt2->bindParam(':id', $compteSecondaireId, \PDO::PARAM_INT);
-    $stmt2->bindParam(':userid', $userId, \PDO::PARAM_INT);
-    $stmt2->execute();
-}
+    public function basculerEnprincipal(int $userId, int $compteSecondaireId): void
+    {
+        $sql1 = "UPDATE compte SET typecompte = 'secondaire' WHERE userid = :userid AND typecompte = 'principal'";
+        $stmt1 = $this->pdo->prepare($sql1);
+        $stmt1->bindParam(':userid', $userId, \PDO::PARAM_INT);
+        $stmt1->execute();
+        $sql2 = "UPDATE compte SET typecompte = 'principal' WHERE id = :id AND userid = :userid";
+        $stmt2 = $this->pdo->prepare($sql2);
+        $stmt2->bindParam(':id', $compteSecondaireId, \PDO::PARAM_INT);
+        $stmt2->bindParam(':userid', $userId, \PDO::PARAM_INT);
+        $stmt2->execute();
+    }
 
-public function getCompteByNumeroTel(string $numeroTel): ?Compte
-{
-    $sql = "SELECT * FROM compte WHERE numerotel = :numerotel LIMIT 1";
-    $stmt = $this->pdo->prepare($sql);
-    $stmt->bindParam(':numerotel', $numeroTel);
-    $stmt->execute();
-    $row = $stmt->fetch(\PDO::FETCH_ASSOC);
-    return $row ? \App\Entity\Compte::toObject($row) : null;
-}
+    public function getCompteByNumeroTel(string $numeroTel): ?Compte
+    {
+        $sql = "SELECT * FROM compte WHERE numerotel = :numerotel LIMIT 1";
+        $stmt = $this->pdo->prepare($sql);
+        $stmt->bindParam(':numerotel', $numeroTel);
+        $stmt->execute();
+        $row = $stmt->fetch(\PDO::FETCH_ASSOC);
+        return $row ? \App\Entity\Compte::toObject($row) : null;
+    }
 }

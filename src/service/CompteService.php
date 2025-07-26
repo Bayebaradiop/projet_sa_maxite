@@ -2,21 +2,21 @@
 
 namespace App\Service;
 
-use App\Core\App;
+use App\Ripository\CompteRipository;
 
 class CompteService
 {
-    private  $compteRipository;
+    private CompteRipository $compteRipository;
 
-    public function __construct()
+    public function __construct(CompteRipository $compteRipository)
     {
-        $this->compteRipository = App::getDependency('CompteRipository');
+        $this->compteRipository = $compteRipository;
     }
 
-    public function getComptesByUserId(int $userId): array
-    {
-        return $this->compteRipository->findByUserId($userId);
-    }
+    // public function getComptesByUserId(int $userId): array
+    // {
+    //     return $this->compteRipository->findByUserId($userId);
+    // }
 
     public function insertUserAndCompte(array $userData, array $compteData): bool
     {
@@ -33,11 +33,6 @@ class CompteService
         return $this->compteRipository->isCniUnique($cni);
     }
 
-    public static function getInstance(): self
-    {
-        return new self();
-    }
-
     public function ajouterCompteSecondaire(array $data): bool
     {
         return $this->compteRipository->ajouterSecondaire($data);
@@ -47,7 +42,6 @@ class CompteService
     {
         return $this->compteRipository->getComptePrincipalByUserId($userId);
     }
-
 
     public function retirerSolde(int $compteId, float $montant): bool
     {
@@ -59,10 +53,8 @@ class CompteService
         return $this->compteRipository->getComptesSecondaireByUserId($userId);
     }
 
-
-public function basculerEnprincipal(int $userId, int $compteSecondaireId): void
-{
-    $this->compteRipository->basculerEnprincipal($userId, $compteSecondaireId);
-}
-
+    public function basculerEnprincipal(int $userId, int $compteSecondaireId): void
+    {
+        $this->compteRipository->basculerEnprincipal($userId, $compteSecondaireId);
+    }
 }

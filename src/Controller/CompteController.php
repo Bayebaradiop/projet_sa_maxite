@@ -3,21 +3,23 @@
 namespace App\Controller;
 
 use App\Core\AbstracteController;
-use App\Core\App;
+use App\Service\CompteService;
+use App\Service\SmsService;
+use App\Core\Session;
 use App\Core\Validator;
 use App\middlewares\CryptPassword;
 
 class CompteController extends AbstracteController
 {
-    private $compteService;
-    private $smsService;
-    private $url;
+    private CompteService $compteService;
+    private SmsService $smsService;
+    private string $url;
 
-    public function __construct()
+    public function __construct(Session $session, CompteService $compteService, SmsService $smsService)
     {
-        parent::__construct();
-        $this->compteService = App::getDependency('compteService');
-        $this->smsService = App::getDependency('smsService');
+        parent::__construct($session);
+        $this->compteService = $compteService;
+        $this->smsService = $smsService;
         $this->url = getenv('URL');
     }
 
@@ -34,19 +36,15 @@ class CompteController extends AbstracteController
             $validator = Validator::getInstance();
 
             $rules = [
-                'nom' => ['required'],
-                'prenom' => ['required'],
+                'numerocarteidentite' => [
+                    'required',
+                    'isCNI'
+                ],
                 'login' => ['required'],
                 'password' => [
                     'required',
                     ['minLength', 6, "Le mot de passe doit contenir au moins 6 caractères"]
                 ],
-                'numeroCarteidentite' => [
-                    'required',
-                    'isCNI'
-                ],
-                'photorecto' => ['required'],
-                'photoverso' => ['required'],
                 'adresse' => ['required'],
                 'numerotel' => [
                     'required',
@@ -54,46 +52,85 @@ class CompteController extends AbstracteController
                 ]
             ];
 
-            // Fusionne $_POST et les noms de fichiers pour la validation
-            $data = $_POST;
-            $data['photorecto'] = $_FILES['photorecto']['name'] ?? '';
-            $data['photoverso'] = $_FILES['photoverso']['name'] ?? '';
-
-            if (!$validator->validate($data, $rules)) {
+            if (!$validator->validate($_POST, $rules)) {
                 $this->session->set('errors', $validator->getErrors());
                 header('Location: ' . $this->url . '/inscription');
                 exit;
             }
 
-            $userData = [
-                'nom' => $_POST['nom'],
-                'prenom' => $_POST['prenom'],
-                'login' => $_POST['login'],
-                'password' => CryptPassword::crypt($_POST['password']),
-                'numeroCarteidentite' => $_POST['numeroCarteidentite'],
-                'photorecto' => $_FILES['photorecto']['name'] ?? '',
-                'photoverso' => $_FILES['photoverso']['name'] ?? '',
-                'adresse' => $_POST['adresse'],
-                'typeuser' => 'client'
-            ];
+            try {
+                // Appel à l’API AppDAF
+                $nci = $_POST['numerocarteidentite'];
+                $url = "http://appdaf.com/api/citoyen/" . urlencode($nci);
+                $response = @file_get_contents($url);
 
-            $dateCreation = date('Y-m-d H:i:s');
-            $solde = 65000;
+                if ($response === false) {
+                    $error = error_get_last();
+                    error_log("Erreur lors de l'appel à AppDAF: " . json_encode($error));
+                    $this->session->set('errors', ['numerocarteidentite' => "Erreur de connexion à AppDAF"]);
+                    header('Location: ' . $this->url . '/inscription');
+                    exit;
+                }
 
-            $compteData = [
-                'numero' => rand(1000000000, 9999999999),
-                'datecreation' => $dateCreation,
-                'solde' => $solde,
-                'numerotel' => $_POST['numerotel'],
-                'typecompte' => 'principal'
-            ];
+                $data = json_decode($response, true);
 
-            $this->compteService->insertUserAndCompte($userData, $compteData);
+                if (!is_array($data) || !isset($data['statut'])) {
+                    error_log("Réponse inattendue de AppDAF: " . $response);
+                    $this->session->set('errors', ['numerocarteidentite' => "Réponse inattendue de AppDAF"]);
+                    header('Location: ' . $this->url . '/inscription');
+                    exit;
+                }
 
-            $this->smsService->sendSms($_POST['numerotel'], 'Votre compte a été créé avec succès !');
+                if ($data['statut'] !== 'success') {
+                    error_log("NCI non trouvé dans AppDAF: " . $nci);
+                    $this->session->set('errors', ['numerocarteidentite' => "Numéro de carte d'identité non trouvé dans AppDAF"]);
+                    header('Location: ' . $this->url . '/inscription');
+                    exit;
+                }
 
-            header('Location: ' . $this->url . '/login');
-            exit;
+                $citoyen = $data['data'];
+
+                $userData = [
+                    'nom' => $citoyen['nom'],
+                    'prenom' => $citoyen['prenom'],
+                    'login' => $_POST['login'],
+                    'password' => CryptPassword::crypt($_POST['password']),
+                    'numerocarteidentite' => $citoyen['nci'],
+                    'photorecto' => $citoyen['url_carte_recto'],
+                    'photoverso' => $citoyen['url_carte_verso'],
+                    'adresse' => $_POST['adresse'],
+                    'typeuser' => 'client'
+                ];
+
+                $dateCreation = date('Y-m-d H:i:s');
+                $solde = 65000;
+
+                $compteData = [
+                    'numero' => rand(1000000000, 9999999999),
+                    'datecreation' => $dateCreation,
+                    'solde' => $solde,
+                    'numerotel' => $_POST['numerotel'],
+                    'typecompte' => 'principal'
+                ];
+
+                $result = $this->compteService->insertUserAndCompte($userData, $compteData);
+                if (!$result) {
+                    error_log("Erreur lors de l'insertion en base pour le NCI: " . $nci);
+                    $this->session->set('errors', ['message' => "Erreur lors de la création du compte"]);
+                    header('Location: ' . $this->url . '/inscription');
+                    exit;
+                }
+
+                $this->smsService->sendSms($_POST['numerotel'], 'Votre compte a été créé avec succès !');
+
+                header('Location: ' . $this->url . '/login');
+                exit;
+            } catch (\Exception $e) {
+                error_log("Exception dans CompteController::store: " . $e->getMessage());
+                $this->session->set('errors', ['message' => "Erreur technique : " . $e->getMessage()]);
+                header('Location: ' . $this->url . '/inscription');
+                exit;
+            }
         }
     }
 
