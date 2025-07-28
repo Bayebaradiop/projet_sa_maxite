@@ -40,11 +40,11 @@ COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
 
 # Create nginx directories and set permissions
 RUN mkdir -p /var/log/nginx /var/lib/nginx/body /var/lib/nginx/fastcgi \
-    && chown -R www-data:www-data /var/www/html \
-    && chown -R www-data:www-data /var/log/nginx \
+    && chown -R 755 www-data:www-data /var/www/html \
+    && chown -R 755 www-data:www-data /var/log/nginx \
     && chmod -R 755 /var/www/html/public \
     && mkdir -p /var/www/html/public/uploads/images \
-    && chown -R www-data:www-data /var/www/html/public/uploads
+    && chown -R 755 www-data:www-data /var/www/html/public/uploads
 
 # Expose port
 EXPOSE 80
