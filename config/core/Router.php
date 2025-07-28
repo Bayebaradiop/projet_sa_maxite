@@ -26,7 +26,8 @@ class Router
             $controller = \App\Core\App::getDependency($controllerAlias);
             $controller->$method();
         } else {
-            header('Location: /erreur');
+            $baseUrl = getenv('URL') ?: '';
+            header('Location: ' . $baseUrl . '/erreur');
             exit;
         }
     }
