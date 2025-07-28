@@ -1,8 +1,10 @@
 # Dockerfile pour projet PHP avec Apache (sans Nginx ni Supervisor)
 FROM php:8.2-apache
 
-# Installe les extensions nécessaires pour PostgreSQL
-RUN docker-php-ext-install pdo pdo_pgsql
+# Installe les dépendances système nécessaires AVANT d'installer l'extension
+RUN apt-get update && \
+    apt-get install -y libpq-dev && \
+    docker-php-ext-install pdo pdo_pgsql
 
 # Active mod_rewrite pour Apache
 RUN a2enmod rewrite
