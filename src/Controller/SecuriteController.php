@@ -2,22 +2,22 @@
 
 namespace App\Controller;
 
-use App\Core\App;
 use App\Core\Validator;
 use Exception;
 use App\Core\AbstracteController;
+use App\Service\SecurityService;
+use App\Core\Session;
 
 class SecuriteController extends AbstracteController
 {
-    private $securityService;
-    private $url;
+    private SecurityService $securityService;
+    private string $url;
 
-    public function __construct()
+    public function __construct(Session $session, SecurityService $securityService)
     {
-        parent::__construct();
+        parent::__construct($session);
         $this->layout = 'securite';
-        $this->session = App::getDependency('session');
-        $this->securityService = App::getDependency('securityService');
+        $this->securityService = $securityService;
         $this->url = getenv('URL');
     }
 
@@ -112,5 +112,4 @@ class SecuriteController extends AbstracteController
         header('Location: ' . $this->url . '/');
         exit();
     }
-    
 }

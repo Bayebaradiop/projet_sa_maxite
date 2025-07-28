@@ -12,7 +12,7 @@ class Router
 
         if (isset($routes[$currentUri])) {
             $route = $routes[$currentUri];
-            $controllerClass = $route['controller'];
+            $controllerAlias = $route['controller']; // Doit être l'alias YAML (ex: 'securiteController')
             $method = $route['method'];
 
             if (isset($route['middleware'])) {
@@ -22,7 +22,8 @@ class Router
                 }
             }
 
-            $controller = new $controllerClass();
+            // Utilise le conteneur pour injecter les dépendances du contrôleur
+            $controller = \App\Core\App::getDependency($controllerAlias);
             $controller->$method();
         } else {
             header('Location: /erreur');

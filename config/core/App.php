@@ -3,10 +3,13 @@
 namespace App\Core;
 
 use Symfony\Component\Yaml\Yaml;
+use ReflectionClass;
+use Exception;
 
 class App
 {
-    private static array $container = [];
+    private static array $services = [];
+    private static array $instances = [];
     private static bool $initialized = false;
 
     public static function run(): void
@@ -21,18 +24,22 @@ class App
         }
 
         $dependencies = Yaml::parseFile(__DIR__ . '/../../config/service.yaml');
-
+        // On aplatit toutes les catégories en un seul tableau [alias => class]
         foreach ($dependencies as $category => $services) {
             foreach ($services as $key => $class) {
-                self::$container[$category][$key] = fn() => $class::getInstance();
+                // Si c'est un tableau (ex: database), prends la clé 'class'
+                if (is_array($class) && isset($class['class'])) {
+                    self::$services[$key] = $class['class'];
+                } else {
+                    self::$services[$key] = $class;
+                }
             }
         }
 
         self::$initialized = true;
     }
 
-
-    public static function getDependency(string $key): mixed
+    public static function getDependency(string $key): object
     {
         self::initialize();
 
@@ -46,3 +53,4 @@ class App
         throw new \Exception("Dependency not found: " . $key);
     }
 }
+

@@ -4,7 +4,6 @@ namespace App\Core;
 
 abstract class AbstracteController
 {
-    use Singleton;
     abstract public function index();
     abstract public function create();
     abstract public function edit();
@@ -12,13 +11,13 @@ abstract class AbstracteController
     abstract public function show();
     abstract public function store();
     abstract public function update();
-    protected $layout = 'base';
 
+    protected $layout = 'base';
     protected Session $session;
 
-    public function __construct()
+    public function __construct(Session $session)
     {
-        $this->session = \App\Core\App::getDependency('session');
+        $this->session = $session;
     }
 
     public function render($view, $data = [])
@@ -32,6 +31,4 @@ abstract class AbstracteController
 
         require_once __DIR__ . '/../../Template/layout/' . $this->layout . '.layout.php';
     }
-
-
 }

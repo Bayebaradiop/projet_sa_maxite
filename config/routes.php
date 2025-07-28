@@ -1,10 +1,4 @@
 <?php
-
-use App\Core\App;
-use App\Controller\ErreurController;
-use App\Controller\CompteController;
-use App\Controller\SecuriteController;
-use App\Controller\TransactionController;
 return [
     '/'           => [
         'controller' => 'securiteController',
@@ -19,7 +13,7 @@ return [
         'method' => 'Inscription',
     ],
     '/store'      => [
-        'controller' => 'compteController',
+        'controller' => 'securiteController',
         'method' => 'store'
     ],
     '/logout'     => [

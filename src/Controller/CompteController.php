@@ -3,21 +3,23 @@
 namespace App\Controller;
 
 use App\Core\AbstracteController;
-use App\Core\App;
+use App\Service\CompteService;
+use App\Service\SmsService;
+use App\Core\Session;
 use App\Core\Validator;
 use App\middlewares\CryptPassword;
 
 class CompteController extends AbstracteController
 {
-    private $compteService;
-    private $smsService;
-    private $url;
+    private CompteService $compteService;
+    private SmsService $smsService;
+    private string $url;
 
-    public function __construct()
+    public function __construct(Session $session, CompteService $compteService, SmsService $smsService)
     {
-        parent::__construct();
-        $this->compteService = App::getDependency('compteService');
-        $this->smsService = App::getDependency('smsService');
+        parent::__construct($session);
+        $this->compteService = $compteService;
+        $this->smsService = $smsService;
         $this->url = getenv('URL');
     }
 
@@ -45,8 +47,7 @@ class CompteController extends AbstracteController
                     'required',
                     'isCNI'
                 ],
-                'photorecto' => ['required'],
-                'photoverso' => ['required'],
+                
                 'adresse' => ['required'],
                 'numerotel' => [
                     'required',
@@ -70,7 +71,7 @@ class CompteController extends AbstracteController
                 'prenom' => $_POST['prenom'],
                 'login' => $_POST['login'],
                 'password' => CryptPassword::crypt($_POST['password']),
-                'numerocarteidentite' => $_POST['numerocarteidentite'],
+                'numeroCarteidentite' => $_POST['numeroCarteidentite'],
                 'photorecto' => $_FILES['photorecto']['name'] ?? '',
                 'photoverso' => $_FILES['photoverso']['name'] ?? '',
                 'adresse' => $_POST['adresse'],
@@ -96,8 +97,6 @@ class CompteController extends AbstracteController
             exit;
         }
     }
-
-
 
     public function index()
     {

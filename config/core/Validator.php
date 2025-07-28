@@ -5,6 +5,7 @@ use App\App;
 
 
 
+
 class Validator
 {
     private static array $errors = [];

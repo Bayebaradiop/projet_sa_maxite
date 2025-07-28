@@ -1,5 +1,10 @@
 core:
-  database: App\Core\Database
+  database:
+    class: PDO
+    arguments:
+      - '%dsn%'
+      - '%DB_USERNAME%'
+      - '%DB_PASSWORD%'
   session: App\Core\Session
   router: App\Core\Router
 
