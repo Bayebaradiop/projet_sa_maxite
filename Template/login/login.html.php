@@ -31,7 +31,7 @@
                 </div>
             <?php endif; ?>
 
-            <form id="loginForm" class="space-y-6" action="/" method="post">
+            <form id="loginForm" class="space-y-6" action="<?= getenv('URL') ?>" method="post">
                 <div>
                     <label for="login" class="block text-gray-700 text-sm font-semibold mb-2 uppercase tracking-wide">
                         Identifiant
