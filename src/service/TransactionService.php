@@ -77,5 +77,15 @@ class TransactionService
             throw new \Exception("Erreur lors de la transaction.");
         }
     }
+
+    public function getTransactionsPaginated(int $userId, int $limit, int $offset): array
+    {
+        return $this->transactionRepo->getTransactionsPaginated($userId, $limit, $offset);
+    }
+
+    public function getTotalTransactionsCount(int $userId): int
+    {
+        return $this->transactionRepo->getTotalTransactionsCount($userId);
+    }
 }
 

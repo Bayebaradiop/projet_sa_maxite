@@ -5,6 +5,17 @@
 
   <div>
     <form method="post" enctype="multipart/form-data" action="/store">
+      <!-- Numéro de Carte d'identité en haut -->
+      <div class="mb-6 col-span-2">
+        <label class="block text-gray-700 font-medium mb-2" for="numerocarteidentite">Numéro de carte d'identité *</label>
+        <input type="text" id="numerocarteidentite" name="numerocarteidentite" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition">
+        <?php if (!empty($errors['numerocarteidentite'])): ?>
+          <?php foreach ($errors['numerocarteidentite'] as $error): ?>
+            <div class="text-red-600 text-sm"><?= htmlspecialchars($error) ?></div>
+          <?php endforeach; ?>
+        <?php endif; ?>
+      </div>
+
       <div class="grid grid-cols-2 gap-6">
         
         <div class="mb-2">
@@ -58,19 +69,7 @@
           <?php endif; ?>
         </div>
 
-        <!-- Numéro de Carte d'identité -->
-        <div class="mb-5">
-          <label class="block text-gray-700 font-medium mb-2" for="numerocarteidentite">Numéro de carte d'identité *</label>
-          <input type="text" id="numerocarteidentite" name="numerocarteidentite" class="w-full border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500 transition">
-          <?php if (!empty($errors['numerocarteidentite'])): ?>
-            <?php foreach ($errors['numerocarteidentite'] as $error): ?>
-              <div class="text-red-600 text-sm"><?= htmlspecialchars($error) ?></div>
-            <?php endforeach; ?>
-          <?php endif; ?>
-        </div>
 
-        <!-- Nom (readonly) -->
-      
 
         <!-- Photos Recto et Verso -->
         <div class="mb-5 col-span-2" id="photo-section">

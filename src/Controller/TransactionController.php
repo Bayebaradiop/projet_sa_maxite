@@ -31,10 +31,21 @@ class TransactionController extends AbstracteController
     {
         $user = $this->session->get('user');
         $userId = $user['id'];
-        $transactions = $this->transactionService->afficheTOusLesTransactions($userId);
+        
+        // Pagination
+        $itemsPerPage = 10;
+        $currentPage = max(1, intval($_GET['page'] ?? 1));
+        $offset = ($currentPage - 1) * $itemsPerPage;
+        
+        // Récupération paginée des transactions
+        $transactions = $this->transactionService->getTransactionsPaginated($userId, $itemsPerPage, $offset);
+        $totalTransactions = $this->transactionService->getTotalTransactionsCount($userId);
+        $totalPages = max(1, ceil($totalTransactions / $itemsPerPage));
 
         $this->render("Transaction/TousLesTransaction", [
-            'transactions' => $transactions
+            'transactions' => $transactions,
+            'currentPage' => $currentPage,
+            'totalPages' => $totalPages
         ]);
     }
 

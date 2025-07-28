@@ -101,4 +101,39 @@ class TransactionRipository extends AbstracteRipository
             return false;
         }
     }
+
+    public function getTransactionsPaginated($userId, $limit, $offset): array
+    {
+        $sql = "SELECT t.* 
+            FROM transactions t
+            INNER JOIN compte c ON t.compteid = c.id
+            WHERE c.userid = :userid and c.typecompte='principal'
+            ORDER BY t.date DESC
+            LIMIT :limit OFFSET :offset";
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindParam(':userid', $userId, PDO::PARAM_INT);
+        $statement->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $statement->bindParam(':offset', $offset, PDO::PARAM_INT);
+        $statement->execute();
+
+        $transactions = [];
+        while ($row = $statement->fetch(PDO::FETCH_ASSOC)) {
+            $transactions[] = Transaction::toObject($row);
+        }
+        return $transactions;
+    }
+
+    public function getTotalTransactionsCount($userId): int
+    {
+        $sql = "SELECT COUNT(*) as total
+            FROM transactions t
+            INNER JOIN compte c ON t.compteid = c.id
+            WHERE c.userid = :userid and c.typecompte='principal'";
+        $statement = $this->pdo->prepare($sql);
+        $statement->bindParam(':userid', $userId, PDO::PARAM_INT);
+        $statement->execute();
+        
+        $result = $statement->fetch(PDO::FETCH_ASSOC);
+        return (int) $result['total'];
+    }
 }
