@@ -71,7 +71,7 @@ class CompteController extends AbstracteController
                 'prenom' => $_POST['prenom'],
                 'login' => $_POST['login'],
                 'password' => CryptPassword::crypt($_POST['password']),
-                'numeroCarteidentite' => $_POST['numeroCarteidentite'],
+                'numerocarteidentite' => $_POST['numerocarteidentite'],
                 'photorecto' => $_FILES['photorecto']['name'] ?? '',
                 'photoverso' => $_FILES['photoverso']['name'] ?? '',
                 'adresse' => $_POST['adresse'],

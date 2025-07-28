@@ -86,6 +86,7 @@ class SecuriteController extends AbstracteController
             } catch (Exception $e) {
                 $validator->addError('system', "Erreur système");
                 $this->session->set('errors', $validator->getErrors());
+                error_log($e->getMessage());
                 header('Location: ' . $this->url . '/');
                 exit();
             }
