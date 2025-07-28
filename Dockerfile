@@ -1,22 +1,25 @@
-FROM php:8.2-fpm
+FROM php:8.2-apache
 
-# Install extensions
-RUN apt-get update && apt-get install -y \
-    libpq-dev unzip curl && \
-    docker-php-ext-install pdo pdo_pgsql
+# Installe les extensions nécessaires
+RUN apt-get update && apt-get install -y libpq-dev unzip curl \
+    && docker-php-ext-install pdo pdo_pgsql
 
 # Installer Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Installer les dépendances du projet
-WORKDIR /var/www
-COPY . /var/www
-RUN composer install
+# Copier le code source
+WORKDIR /var/www/html
+COPY . /var/www/html
+
+# Installer les dépendances PHP
+RUN composer install --no-dev --optimize-autoloader
 
 # Droits
-RUN chown -R www-data:www-data /var/www
+RUN chown -R www-data:www-data /var/www/html
 
-EXPOSE 9000
+# Créer le dossier uploads si besoin
+RUN mkdir -p /var/www/html/public/uploads && chmod -R 777 /var/www/html/public/uploads
 
-# Démarrer le serveur intégré PHP
-CMD ["php", "-S", "0.0.0.0:8000", "-t", "public"]
+EXPOSE 80
+
+# Apache démarre automatiquement
