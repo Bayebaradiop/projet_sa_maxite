@@ -1,3 +1,4 @@
+
 FROM php:8.3-apache
 
 RUN apt-get update && apt-get install -y \
@@ -15,9 +16,25 @@ COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
 
+
 COPY . /var/www/html
 
-COPY .env /var/www/html/.env
+# Générer un .env à partir des variables d'environnement
+RUN echo "APP_NAME=${APP_NAME}" > .env && \
+    echo "APP_ENV=${APP_ENV}" >> .env && \
+    echo "APP_DEBUG=${APP_DEBUG}" >> .env && \
+    echo "URL=${URL}" >> .env && \
+    echo "DB_HOST=${DB_HOST}" >> .env && \
+    echo "DB_PORT=${DB_PORT}" >> .env && \
+    echo "DB_DATABASE=${DB_DATABASE}" >> .env && \
+    echo "DB_USERNAME=${DB_USERNAME}" >> .env && \
+    echo "DB_PASSWORD=${DB_PASSWORD}" >> .env && \
+    echo "dsn=${dsn}" >> .env && \
+    echo "TWILIO_SID=${TWILIO_SID}" >> .env && \
+    echo "TWILIO_TOKEN=${TWILIO_TOKEN}" >> .env && \
+    echo "TWILIO_FROM=${TWILIO_FROM}" >> .env && \
+    echo "IMG_DIR=${IMG_DIR}" >> .env
+
 
 RUN chown -R www-data:www-data /var/www/html
 RUN chmod -R 755 /var/www/html
