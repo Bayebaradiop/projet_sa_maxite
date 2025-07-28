@@ -19,7 +19,7 @@ class CompteRipository extends AbstracteRipository
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindParam(':userid', $userId, PDO::PARAM_INT);
         $stmt->execute();
-
+        
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
         if ($row) {
             return Compte::toObject($row);

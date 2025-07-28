@@ -47,8 +47,7 @@ class CompteController extends AbstracteController
                     'required',
                     'isCNI'
                 ],
-                'photorecto' => ['required'],
-                'photoverso' => ['required'],
+                
                 'adresse' => ['required'],
                 'numerotel' => [
                     'required',
@@ -73,8 +72,8 @@ class CompteController extends AbstracteController
                 'login' => $_POST['login'],
                 'password' => CryptPassword::crypt($_POST['password']),
                 'numerocarteidentite' => $_POST['numerocarteidentite'],
-                'photorecto' => $_FILES['photorecto']['name'] ?? '',
-                'photoverso' => $_FILES['photoverso']['name'] ?? '',
+                'photorecto' => '',
+                'photoverso' => '',
                 'adresse' => $_POST['adresse'],
                 'typeuser' => 'client'
             ];
@@ -98,8 +97,6 @@ class CompteController extends AbstracteController
             exit;
         }
     }
-
-
 
     public function index()
     {
