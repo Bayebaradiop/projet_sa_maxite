@@ -13,9 +13,9 @@ RUN a2ensite 000-default.conf
 
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-WORKDIR /app
+WORKDIR /var/www/html
 
-COPY . /app
+COPY . /var/www/html
 
 RUN echo "APP_NAME=${APP_NAME}" > .env && \
     echo "APP_ENV=${APP_ENV}" >> .env && \
@@ -32,7 +32,7 @@ RUN echo "APP_NAME=${APP_NAME}" > .env && \
     echo "TWILIO_FROM=${TWILIO_FROM}" >> .env && \
     echo "IMG_DIR=${IMG_DIR}" >> .env
 
-RUN chown -R www-data:www-data /app
-RUN chmod -R 755 /app
+RUN chown -R www-data:www-data /var/www/html
+RUN chmod -R 755 /var/www/html
 
 EXPOSE 80
