@@ -1,53 +1,37 @@
-FROM php:8.3-fpm
+FROM php:8.3-apache
 
-# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git \
-    curl \
-    libpng-dev \
-    libonig-dev \
-    libxml2-dev \
+    libpq-dev \
+    libzip-dev \
     zip \
     unzip \
-    libpq-dev \
-    nginx \
-    supervisor
+    && docker-php-ext-install pdo pdo_pgsql pgsql
 
-# Clear cache
-RUN apt-get clean && rm -rf /var/lib/apt/lists/*
+RUN a2enmod rewrite
 
-# Install PHP extensions
-RUN docker-php-ext-install pdo pdo_pgsql mbstring exif pcntl bcmath gd
+COPY apache-config.conf /etc/apache2/sites-available/000-default.conf
 
-# Get latest Composer
-COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
+COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
-# Set working directory
-WORKDIR /var/www/html
+WORKDIR /app
 
-# Copy application files
-COPY . /var/www/html
+COPY . /app
 
-# Install PHP dependencies
-RUN composer install --no-dev --optimize-autoloader
+RUN echo "APP_NAME=${APP_NAME}" > .env && \
+    echo "APP_ENV=${APP_ENV}" >> .env && \
+    echo "APP_DEBUG=${APP_DEBUG}" >> .env && \
+    echo "URL=${URL}" >> .env && \
+    echo "DB_HOST=${DB_HOST}" >> .env && \
+    echo "DB_PORT=${DB_PORT}" >> .env && \
+    echo "DB_DATABASE=${DB_DATABASE}" >> .env && \
+    echo "DB_USERNAME=${DB_USERNAME}" >> .env && \
+    echo "DB_PASSWORD=${DB_PASSWORD}" >> .env && \
+    echo "dsn=${dsn}" >> .env && \
+    echo "TWILIO_SID=${TWILIO_SID}" >> .env && \
+    echo "TWILIO_TOKEN=${TWILIO_TOKEN}" >> .env && \
+    echo "TWILIO_FROM=${TWILIO_FROM}" >> .env && \
+    echo "IMG_DIR=${IMG_DIR}" >> .env
 
-# Copy nginx configuration
-COPY nginx/nginx.conf /etc/nginx/nginx.conf
-COPY nginx/default.conf /etc/nginx/conf.d/default.conf
+RUN chown -R www-data:www-data /app
 
-# Copy supervisor configuration
-COPY docker/supervisord.conf /etc/supervisor/conf.d/supervisord.conf
-
-# Create nginx directories and set permissions
-RUN mkdir -p /var/log/nginx /var/lib/nginx/body /var/lib/nginx/fastcgi \
-    && chown -R 755 www-data:www-data /var/www/html \
-    && chown -R 755 www-data:www-data /var/log/nginx \
-    && chmod -R 755 /var/www/html/public \
-    && mkdir -p /var/www/html/public/uploads/images \
-    && chown -R 755 www-data:www-data /var/www/html/public/uploads
-
-# Expose port
 EXPOSE 80
-
-# Start supervisor
-CMD ["/usr/bin/supervisord", "-c", "/etc/supervisor/conf.d/supervisord.conf"]
